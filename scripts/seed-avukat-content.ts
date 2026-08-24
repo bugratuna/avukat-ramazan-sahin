@@ -6,10 +6,14 @@
  *
  * Çalıştırma: npx payload run scripts/seed-avukat-content.ts
  */
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { practiceAreas, firmInfo, values, faq, konkordatoArticle, type ArticleBlock } from '../src/endpoints/seed/avukat-data'
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // --- Lexical düz metin yardımcıları -----------------------------------
 
@@ -160,6 +164,25 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       description: konkordatoArticle.intro,
     },
   })
+
+  // --- Ana sayfa hero görseli (geçici) --------------------------------
+  // NOT: Gerçek Bursa videosu/fotoğrafı gelene kadar geçici bir görsel.
+  // Admin panelden Media > Home Hero (Geçici) dokümanını değiştirip yeni
+  // bir video (mp4) yüklerseniz otomatik olarak döngülü arka plan videosuna
+  // dönüşür — kod değişikliği gerekmez.
+  const heroAlt = 'Ana sayfa hero arka planı (geçici — gerçek Bursa görseliyle değiştirilecek)'
+  const { docs: existingHeroMedia } = await payload.find({
+    collection: 'media',
+    where: { alt: { equals: heroAlt } },
+    limit: 1,
+  })
+  const heroMedia =
+    existingHeroMedia[0] ||
+    (await payload.create({
+      collection: 'media',
+      data: { alt: heroAlt },
+      filePath: path.resolve(dirname, 'hero-placeholder.png'),
+    }))
 
   // --- Sayfalar -------------------------------------------------------
   const upsertPage = async (data: Record<string, unknown> & { slug: string }) => {
@@ -321,9 +344,11 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     title: 'Ana Sayfa',
     _status: 'published',
     hero: {
-      type: 'lowImpact',
+      type: 'highImpact',
+      eyebrow: 'Bursa Avukatlık ve Hukuk Bürosu',
+      media: heroMedia?.id,
       richText: richTextRoot([
-        headingNode(firmInfo.name, 'h1'),
+        headingNode('Güvenilir Hukuki Çözümler, Kararlı Savunma', 'h1'),
         paragraphNode(
           'Sürekli güncellenen mevzuat bilgimiz ve stratejik bakış açımızla, hukuki süreçlerinizi en doğru şekilde yöneterek güvenilir çözümler üretiyoruz.',
         ),

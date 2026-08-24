@@ -39,6 +39,14 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'eyebrow',
+      type: 'text',
+      admin: {
+        description: 'Başlığın üstünde görünen küçük vurgu metni (opsiyonel).',
+      },
+      label: 'Eyebrow',
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({
