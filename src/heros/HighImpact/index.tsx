@@ -1,6 +1,7 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect } from 'react'
+import { cn } from '@/utilities/ui'
+import React, { useEffect, useState } from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -28,12 +29,21 @@ const pillClasses: Record<string, string> = {
     'group inline-flex items-center gap-3 rounded-full border border-white/40 py-2 pl-6 pr-2 text-sm font-medium text-white transition-colors hover:border-white hover:bg-white/10',
 }
 
+const enterClasses = (visible: boolean) =>
+  cn(
+    'transition-all duration-500 ease-out motion-reduce:transition-none',
+    visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
+  )
+
 export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, richText }) => {
   const { setHeaderTheme } = useHeaderTheme()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setHeaderTheme('dark')
-  })
+    const timeout = setTimeout(() => setMounted(true), 50)
+    return () => clearTimeout(timeout)
+  }, [])
 
   return (
     <div
@@ -52,19 +62,28 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
       <div className="container relative z-10 pb-20 pt-40 md:pb-28">
         <div className="max-w-2xl">
           {eyebrow && (
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-gold">
+            <p
+              className={cn(
+                'mb-4 text-sm font-medium uppercase tracking-[0.2em] text-gold',
+                enterClasses(mounted),
+              )}
+            >
               {eyebrow}
             </p>
           )}
           {richText && (
             <RichText
-              className="mb-8 [&_h1]:font-serif [&_h1]:text-5xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:[&_h1]:text-7xl [&_p]:mt-4 [&_p]:max-w-lg [&_p]:text-white/80"
+              className={cn(
+                'mb-8 [&_h1]:font-serif [&_h1]:text-5xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:[&_h1]:text-7xl [&_p]:mt-4 [&_p]:max-w-lg [&_p]:text-white/80',
+                enterClasses(mounted),
+              )}
               data={richText}
               enableGutter={false}
+              style={{ transitionDelay: '100ms' }}
             />
           )}
           {Array.isArray(links) && links.length > 0 && (
-            <ul className="flex flex-wrap gap-4">
+            <ul className={cn('flex flex-wrap gap-4', enterClasses(mounted))} style={{ transitionDelay: '220ms' }}>
               {links.map(({ link }, i) => {
                 if (!link) return null
                 const { label, appearance, ...linkProps } = link
