@@ -1,6 +1,7 @@
 'use client'
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
+import { Scale } from 'lucide-react'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
 
@@ -32,30 +33,39 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'group overflow-hidden rounded-xl border border-border bg-card transition-all hover:cursor-pointer hover:border-gold/60 hover:shadow-lg',
         className,
       )}
       ref={card.ref}
     >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-secondary to-secondary/40">
+        {metaImage && typeof metaImage !== 'string' ? (
+          <Media
+            className="size-full"
+            imgClassName="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+            resource={metaImage}
+            size="33vw"
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center">
+            <Scale className="size-8 text-muted-foreground/40" strokeWidth={1.25} />
+          </div>
+        )}
       </div>
-      <div className="p-4">
+      <div className="p-5">
         {showCategories && hasCategories && (
-          <div className="uppercase text-sm mb-4">
+          <div className="mb-3 flex flex-wrap gap-2">
             {categories?.map((category, index) => {
               if (typeof category === 'object') {
                 const { title: titleFromCategory } = category
 
                 const categoryTitle = titleFromCategory || 'Untitled category'
 
-                const isLast = index === categories.length - 1
-
                 return (
                   <Fragment key={index}>
-                    {categoryTitle}
-                    {!isLast && <Fragment>, &nbsp;</Fragment>}
+                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-medium uppercase tracking-wide text-gold-foreground dark:text-gold">
+                      {categoryTitle}
+                    </span>
                   </Fragment>
                 )
               }
@@ -65,15 +75,15 @@ export const Card: React.FC<{
           </div>
         )}
         {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
+          <h3 className="font-serif text-xl leading-snug font-normal">
+            <Link className="hover:text-gold" href={href} ref={link.ref}>
+              {titleToUse}
+            </Link>
+          </h3>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && (
+          <p className="mt-2 text-sm text-muted-foreground">{sanitizedDescription}</p>
+        )}
       </div>
     </article>
   )
