@@ -22,17 +22,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { headerTheme, setHeaderTheme } = useHeaderTheme()
+  const { headerTheme, setHeaderTheme, hasAdminBar } = useHeaderTheme()
   const pathname = usePathname()
 
   useEffect(() => {
     setHeaderTheme(null)
+    setTheme(null)
     setMobileOpen(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
   useEffect(() => {
-    if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
+    if (headerTheme !== theme) setTheme(headerTheme ?? null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
@@ -49,7 +50,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300',
+        'fixed inset-x-0 z-50 transition-[background-color,box-shadow,top] duration-300',
+        hasAdminBar ? 'top-10' : 'top-0',
         transparent ? 'bg-transparent' : 'bg-navy shadow-sm',
       )}
       {...(theme ? { 'data-theme': theme } : {})}

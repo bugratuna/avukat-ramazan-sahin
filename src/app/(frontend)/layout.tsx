@@ -9,6 +9,7 @@ import React from 'react'
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
+import { MainContent } from '@/components/MainContent'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
@@ -45,7 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Header />
-          <main className="pt-30">{children}</main>
+          <MainContent>{children}</MainContent>
           <Footer />
           <WhatsAppButton />
         </Providers>

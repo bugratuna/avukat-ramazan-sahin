@@ -23,6 +23,10 @@ import {
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: 'Sayfa',
+    plural: 'Sayfalar',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -58,6 +62,7 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'title',
       type: 'text',
+      label: 'Başlık',
       required: true,
     },
     {
@@ -65,13 +70,14 @@ export const Pages: CollectionConfig<'pages'> = {
       tabs: [
         {
           fields: [hero],
-          label: 'Hero',
+          label: 'Hero Bölümü',
         },
         {
           fields: [
             {
               name: 'layout',
               type: 'blocks',
+              label: 'Sayfa Blokları',
               blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
               required: true,
               admin: {
@@ -79,7 +85,7 @@ export const Pages: CollectionConfig<'pages'> = {
               },
             },
           ],
-          label: 'Content',
+          label: 'İçerik',
         },
         {
           name: 'meta',
@@ -113,6 +119,7 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'publishedAt',
       type: 'date',
+      label: 'Yayın Tarihi',
       admin: {
         position: 'sidebar',
       },

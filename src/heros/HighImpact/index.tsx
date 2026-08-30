@@ -36,7 +36,7 @@ const enterClasses = (visible: boolean) =>
   )
 
 export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, richText }) => {
-  const { setHeaderTheme } = useHeaderTheme()
+  const { setHeaderTheme, hasAdminBar } = useHeaderTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -47,7 +47,10 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
 
   return (
     <div
-      className="relative -mt-30 flex min-h-screen items-end overflow-hidden text-white"
+      className={cn(
+        'relative flex min-h-screen items-end overflow-hidden text-white transition-[margin-top] duration-300',
+        hasAdminBar ? '-mt-40' : '-mt-30',
+      )}
       data-theme="dark"
     >
       <div className="absolute inset-0 -z-10 select-none">

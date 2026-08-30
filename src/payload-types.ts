@@ -203,6 +203,9 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Görsel veya video (mp4) yükleyebilirsiniz — video otomatik döngüye alınır.
+     */
     media?: (number | null) | Media;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
