@@ -50,9 +50,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300',
-        transparent
-          ? 'bg-gradient-to-b from-black/55 via-black/25 to-transparent'
-          : 'bg-navy shadow-sm',
+        transparent ? 'bg-transparent' : 'bg-navy shadow-sm',
       )}
       {...(theme ? { 'data-theme': theme } : {})}
     >

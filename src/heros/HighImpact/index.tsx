@@ -47,7 +47,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
 
   return (
     <div
-      className="relative -mt-30 flex min-h-[92vh] items-end overflow-hidden text-white"
+      className="relative -mt-30 flex min-h-screen items-end overflow-hidden text-white"
       data-theme="dark"
     >
       <div className="absolute inset-0 -z-10 select-none">
