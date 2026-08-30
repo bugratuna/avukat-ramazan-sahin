@@ -50,14 +50,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300',
-        transparent ? 'bg-transparent' : 'bg-navy shadow-sm',
+        transparent
+          ? 'bg-gradient-to-b from-black/55 via-black/25 to-transparent'
+          : 'bg-navy shadow-sm',
       )}
       {...(theme ? { 'data-theme': theme } : {})}
     >
       {/* Üst bilgi çubuğu */}
       <div
         className={cn(
-          'hidden overflow-hidden border-b border-white/10 text-navy-foreground/80 transition-[max-height,opacity] duration-300 md:block',
+          'hidden overflow-hidden text-navy-foreground/80 transition-[max-height,opacity] duration-300 md:block',
+          !transparent && 'border-b border-white/10',
           scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100',
         )}
       >
