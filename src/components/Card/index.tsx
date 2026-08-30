@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
-import { Scale } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
 
@@ -29,62 +29,52 @@ export const Card: React.FC<{
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
+  const hasImage = Boolean(metaImage && typeof metaImage !== 'string')
 
   return (
     <article
       className={cn(
-        'group overflow-hidden rounded-xl border border-border bg-card transition-all hover:cursor-pointer hover:border-gold/60 hover:shadow-lg',
+        'group flex h-full flex-col border-t-2 border-border pt-6 transition-colors hover:border-gold',
         className,
       )}
       ref={card.ref}
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-secondary to-secondary/40">
-        {metaImage && typeof metaImage !== 'string' ? (
-          <Media
-            className="size-full"
-            imgClassName="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-            resource={metaImage}
-            size="33vw"
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center">
-            <Scale className="size-8 text-muted-foreground/40" strokeWidth={1.25} />
-          </div>
-        )}
-      </div>
-      <div className="p-5">
-        {showCategories && hasCategories && (
-          <div className="mb-3 flex flex-wrap gap-2">
-            {categories?.map((category, index) => {
-              if (typeof category === 'object') {
-                const { title: titleFromCategory } = category
-
-                const categoryTitle = titleFromCategory || 'Untitled category'
-
-                return (
-                  <Fragment key={index}>
-                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-medium uppercase tracking-wide text-gold-foreground dark:text-gold">
-                      {categoryTitle}
-                    </span>
-                  </Fragment>
-                )
-              }
-
-              return null
-            })}
-          </div>
-        )}
-        {titleToUse && (
-          <h3 className="font-serif text-xl leading-snug font-normal">
-            <Link className="hover:text-gold" href={href} ref={link.ref}>
-              {titleToUse}
-            </Link>
-          </h3>
-        )}
-        {description && (
-          <p className="mt-2 text-sm text-muted-foreground">{sanitizedDescription}</p>
-        )}
-      </div>
+      {hasImage && (
+        <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden bg-secondary">
+          <Media className="size-full" imgClassName="size-full object-cover" resource={metaImage!} size="33vw" />
+        </div>
+      )}
+      {showCategories && hasCategories && (
+        <div className="mb-2 text-xs font-medium tracking-[0.12em] text-gold uppercase">
+          {categories?.map((category, index) => {
+            if (typeof category === 'object') {
+              const categoryTitle = category.title || 'Untitled category'
+              const isLast = index === categories.length - 1
+              return (
+                <Fragment key={index}>
+                  {categoryTitle}
+                  {!isLast && <Fragment>, &nbsp;</Fragment>}
+                </Fragment>
+              )
+            }
+            return null
+          })}
+        </div>
+      )}
+      {titleToUse && (
+        <h3 className="font-serif text-xl leading-snug font-normal">
+          <Link href={href} ref={link.ref}>
+            {titleToUse}
+          </Link>
+        </h3>
+      )}
+      {description && (
+        <p className="mt-2 flex-1 text-sm text-muted-foreground">{sanitizedDescription}</p>
+      )}
+      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors group-hover:text-gold">
+        Devamını Oku
+        <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+      </span>
     </article>
   )
 }

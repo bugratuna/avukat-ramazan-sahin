@@ -47,7 +47,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
 
   return (
     <div
-      className="relative -mt-[10.4rem] flex min-h-[92vh] items-end overflow-hidden text-white"
+      className="relative -mt-30 flex min-h-[92vh] items-end overflow-hidden text-white"
       data-theme="dark"
     >
       <div className="absolute inset-0 -z-10 select-none">
@@ -59,12 +59,12 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
       </div>
 
-      <div className="container relative z-10 pb-20 pt-40 md:pb-28">
+      <div className="container relative z-10 pt-32 pb-24 md:pt-40 md:pb-28">
         <div className="max-w-2xl">
           {eyebrow && (
             <p
               className={cn(
-                'mb-4 text-sm font-medium uppercase tracking-[0.2em] text-gold',
+                'mb-3 text-xs font-medium uppercase tracking-[0.2em] text-gold md:mb-4 md:text-sm',
                 enterClasses(mounted),
               )}
             >
@@ -74,7 +74,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
           {richText && (
             <RichText
               className={cn(
-                'mb-8 [&_h1]:font-serif [&_h1]:text-5xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:[&_h1]:text-7xl [&_p]:mt-4 [&_p]:max-w-lg [&_p]:text-white/80',
+                'mb-6 [&_h1]:font-serif [&_h1]:text-4xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:mb-8 md:[&_h1]:text-7xl [&_p]:mt-3 [&_p]:max-w-lg [&_p]:text-sm [&_p]:text-white/80 md:[&_p]:mt-4 md:[&_p]:text-base',
                 enterClasses(mounted),
               )}
               data={richText}

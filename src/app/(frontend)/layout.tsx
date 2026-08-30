@@ -35,8 +35,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
         <Providers>
@@ -47,7 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Header />
-          {children}
+          <main className="pt-30">{children}</main>
           <Footer />
           <WhatsAppButton />
         </Providers>
@@ -58,9 +56,32 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
+  // NOT: alt sayfalar kendi tam başlıklarını generateMeta.ts üzerinden
+  // ("Sayfa | Ramazan Şahin Hukuk Bürosu") kendileri oluşturuyor, bu yüzden
+  // burada template kullanmıyoruz (aksi halde ek soneki iki kez eklerdi).
+  title: 'Ramazan Şahin Hukuk Bürosu',
+  description:
+    'Bursa merkezli Ramazan Şahin Hukuk Bürosu — ceza, aile, ticaret, icra-iflas ve daha birçok alanda güvenilir hukuki danışmanlık ve dava takibi.',
+  robots: {
+    follow: true,
+    index: true,
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
   },
+}
+
+export const viewport = {
+  themeColor: '#0e1729',
 }
