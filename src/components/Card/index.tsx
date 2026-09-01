@@ -34,7 +34,7 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'group flex h-full flex-col border-t-2 border-border pt-6 transition-colors hover:border-gold',
+        'group flex h-full cursor-pointer flex-col border-t-2 border-border pt-6 transition-colors hover:border-gold',
         className,
       )}
       ref={card.ref}

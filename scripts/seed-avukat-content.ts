@@ -195,6 +195,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       content: articleRichText([
         { type: 'heading', text: area.subtitle },
         { type: 'paragraph', text: area.body },
+        ...area.details,
       ]),
       meta: {
         title: area.title,
