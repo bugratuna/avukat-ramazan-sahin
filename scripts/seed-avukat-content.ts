@@ -464,6 +464,32 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
           'Sürekli güncellenen mevzuat bilgimiz ve stratejik bakış açımızla, hukuki süreçlerinizi en doğru şekilde yöneterek güvenilir çözümler üretiyoruz.',
         ),
       ]),
+      slides: [
+        {
+          eyebrow: 'Bursa Avukatlık ve Hukuk Bürosu',
+          heading: 'Güvenilir Hukuki Çözümler, Kararlı Savunma',
+          description:
+            'Sürekli güncellenen mevzuat bilgimiz ve stratejik bakış açımızla, hukuki süreçlerinizi en doğru şekilde yöneterek güvenilir çözümler üretiyoruz.',
+        },
+        {
+          eyebrow: 'Geniş Kapsamlı Hukuki Danışmanlık',
+          heading: 'Her Hukuki İhtiyacınıza Tek Adresten Çözüm',
+          description:
+            'Ticaret ve icra-iflastan gayrimenkule, konkordatodan idare hukukuna uzanan geniş uzmanlık alanımızla, karmaşık süreçlerinizi tek bir ekiple yönetiyoruz.',
+        },
+        {
+          eyebrow: 'Yenilikçi ve Stratejik Yaklaşım',
+          heading: 'Geleneksel Hukuk Bilgisini Çağın Gereksinimleriyle Buluşturuyoruz',
+          description:
+            'Değişen mevzuatı ve ticari koşulları yakından takip ederek, müvekkillerimize güncel ve yenilikçi hukuki stratejiler sunuyoruz.',
+        },
+        {
+          eyebrow: 'Güven Temelli Müvekkil İlişkisi',
+          heading: 'Haklarınızı Korurken Güveninizi Kazanıyoruz',
+          description:
+            'Her dosyaya özel ilgi göstererek, süreç boyunca şeffaf iletişim kurmayı ve müvekkillerimizin haklarını en etkin şekilde savunmayı ilke ediniyoruz.',
+        },
+      ],
       links: [
         {
           link: {

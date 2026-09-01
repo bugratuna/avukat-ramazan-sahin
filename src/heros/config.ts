@@ -61,6 +61,34 @@ export const hero: Field = {
       }),
       label: false,
     },
+    {
+      name: 'slides',
+      type: 'array',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+        description:
+          'Video/görsel arka planın üzerinde belirli aralıklarla otomatik değişen metinler (opsiyonel). En az 2 slayt eklenirse kayan metin gösterilir; boş bırakılırsa yukarıdaki üst vurgu metni ve başlık kullanılır.',
+      },
+      fields: [
+        {
+          name: 'eyebrow',
+          type: 'text',
+          label: 'Üst Vurgu Metni',
+        },
+        {
+          name: 'heading',
+          type: 'text',
+          label: 'Başlık',
+          required: true,
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Açıklama',
+        },
+      ],
+      label: 'Kayan Metinler (Slider)',
+    },
     linkGroup({
       overrides: {
         maxRows: 2,

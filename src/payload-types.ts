@@ -179,6 +179,17 @@ export interface Page {
       };
       [k: string]: unknown;
     } | null;
+    /**
+     * Video/görsel arka planın üzerinde belirli aralıklarla otomatik değişen metinler (opsiyonel). En az 2 slayt eklenirse kayan metin gösterilir; boş bırakılırsa yukarıdaki üst vurgu metni ve başlık kullanılır.
+     */
+    slides?:
+      | {
+          eyebrow?: string | null;
+          heading: string;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
     links?:
       | {
           link: {
@@ -1087,6 +1098,14 @@ export interface PagesSelect<T extends boolean = true> {
         type?: T;
         eyebrow?: T;
         richText?: T;
+        slides?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              id?: T;
+            };
         links?:
           | T
           | {

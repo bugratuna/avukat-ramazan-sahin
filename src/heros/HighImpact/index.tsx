@@ -1,7 +1,7 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { cn } from '@/utilities/ui'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -35,15 +35,43 @@ const enterClasses = (visible: boolean) =>
     visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
   )
 
-export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, richText }) => {
+const SLIDE_INTERVAL_MS = 6000
+const SLIDE_FADE_MS = 500
+
+export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, richText, slides }) => {
   const { setHeaderTheme, hasAdminBar } = useHeaderTheme()
   const [mounted, setMounted] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [slideVisible, setSlideVisible] = useState(true)
+
+  const validSlides = useMemo(
+    () => (slides ?? []).filter((slide): slide is NonNullable<typeof slide> => Boolean(slide?.heading)),
+    [slides],
+  )
+  const useSlider = validSlides.length > 1
 
   useEffect(() => {
     setHeaderTheme('dark')
     const timeout = setTimeout(() => setMounted(true), 50)
     return () => clearTimeout(timeout)
   }, [])
+
+  useEffect(() => {
+    if (!useSlider) return
+
+    const interval = window.setInterval(() => {
+      setSlideVisible(false)
+      window.setTimeout(() => {
+        setActiveIndex((current) => (current + 1) % validSlides.length)
+        setSlideVisible(true)
+      }, SLIDE_FADE_MS)
+    }, SLIDE_INTERVAL_MS)
+
+    return () => window.clearInterval(interval)
+  }, [useSlider, validSlides.length])
+
+  const activeSlide = useSlider ? validSlides[activeIndex] : null
+  const textVisible = mounted && slideVisible
 
   return (
     <div
@@ -70,29 +98,66 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
 
       <div className="container relative z-10 pt-32 pb-24 md:pt-40 md:pb-28">
         <div className="max-w-2xl">
-          {eyebrow && (
-            <p
-              className={cn(
-                'mb-3 text-xs font-medium uppercase tracking-[0.2em] text-gold md:mb-4 md:text-sm',
-                enterClasses(mounted),
+          {activeSlide ? (
+            <>
+              {activeSlide.eyebrow && (
+                <p
+                  className={cn(
+                    'mb-3 text-xs font-medium uppercase tracking-[0.2em] text-gold md:mb-4 md:text-sm',
+                    enterClasses(textVisible),
+                  )}
+                >
+                  {activeSlide.eyebrow}
+                </p>
               )}
-            >
-              {eyebrow}
-            </p>
-          )}
-          {richText && (
-            <RichText
-              className={cn(
-                'mb-6 [&_h1]:font-serif [&_h1]:text-4xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:mb-8 md:[&_h1]:text-7xl [&_p]:mt-3 [&_p]:max-w-lg [&_p]:text-sm [&_p]:text-white/80 md:[&_p]:mt-4 md:[&_p]:text-base',
-                enterClasses(mounted),
+              <h1
+                className={cn(
+                  'mb-6 font-serif text-4xl font-normal leading-[1.05] tracking-tight md:mb-8 md:text-7xl',
+                  enterClasses(textVisible),
+                )}
+                style={{ transitionDelay: '100ms' }}
+              >
+                {activeSlide.heading}
+              </h1>
+              {activeSlide.description && (
+                <p
+                  className={cn(
+                    'mt-3 max-w-lg text-sm text-white/80 md:mt-4 md:text-base',
+                    enterClasses(textVisible),
+                  )}
+                  style={{ transitionDelay: '150ms' }}
+                >
+                  {activeSlide.description}
+                </p>
               )}
-              data={richText}
-              enableGutter={false}
-              style={{ transitionDelay: '100ms' }}
-            />
+            </>
+          ) : (
+            <>
+              {eyebrow && (
+                <p
+                  className={cn(
+                    'mb-3 text-xs font-medium uppercase tracking-[0.2em] text-gold md:mb-4 md:text-sm',
+                    enterClasses(mounted),
+                  )}
+                >
+                  {eyebrow}
+                </p>
+              )}
+              {richText && (
+                <RichText
+                  className={cn(
+                    'mb-6 [&_h1]:font-serif [&_h1]:text-4xl [&_h1]:font-normal [&_h1]:leading-[1.05] [&_h1]:tracking-tight md:mb-8 md:[&_h1]:text-7xl [&_p]:mt-3 [&_p]:max-w-lg [&_p]:text-sm [&_p]:text-white/80 md:[&_p]:mt-4 md:[&_p]:text-base',
+                    enterClasses(mounted),
+                  )}
+                  data={richText}
+                  enableGutter={false}
+                  style={{ transitionDelay: '100ms' }}
+                />
+              )}
+            </>
           )}
           {Array.isArray(links) && links.length > 0 && (
-            <ul className={cn('flex flex-wrap gap-4', enterClasses(mounted))} style={{ transitionDelay: '220ms' }}>
+            <ul className={cn('mt-6 flex flex-wrap gap-4', enterClasses(mounted))} style={{ transitionDelay: '220ms' }}>
               {links.map(({ link }, i) => {
                 if (!link) return null
                 const { label, appearance, ...linkProps } = link
@@ -110,6 +175,21 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
                 )
               })}
             </ul>
+          )}
+          {useSlider && (
+            <div className="mt-8 flex gap-2" role="tablist" aria-label="Öne çıkan bilgiler">
+              {validSlides.map((slide, i) => (
+                <span
+                  aria-current={i === activeIndex}
+                  className={cn(
+                    'h-1 w-8 rounded-full transition-colors duration-300',
+                    i === activeIndex ? 'bg-gold' : 'bg-white/25',
+                  )}
+                  key={slide.id ?? i}
+                  role="tab"
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>
