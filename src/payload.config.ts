@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -67,6 +68,15 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL,
     },
   }),
+  // RESEND_API_KEY tanımlı değilse (yerel geliştirme) Payload varsayılan
+  // olarak e-postaları konsola yazar — bkz. .env.example.
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'info@avukatramazansahin.com.tr',
+        defaultFromName: 'Ramazan Şahin Hukuk Bürosu',
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
