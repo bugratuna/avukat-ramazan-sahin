@@ -3,7 +3,8 @@ import { getServerSideURL } from './getURL'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  description: 'An open-source website built with Payload and Next.js.',
+  description:
+    'Bursa merkezli Ramazan Şahin Hukuk Bürosu — ceza, aile, ticaret, icra-iflas ve daha birçok alanda güvenilir hukuki danışmanlık ve dava takibi.',
   images: [
     {
       url: `${getServerSideURL()}/website-template-OG.webp`,

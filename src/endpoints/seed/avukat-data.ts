@@ -186,12 +186,18 @@ export const practiceAreas: PracticeArea[] = [
   },
 ]
 
+const address =
+  'Hacı İlyas Mahallesi 4. Tan Sokak No:6 Kanburoğlu Kardeşler İş Hanı Kat: 3 Daire: 10 No: 302 Osmangazi/Bursa'
+
 export const firmInfo = {
   name: 'Ramazan Şahin Hukuk Bürosu',
   founder: 'Avukat Ramazan Şahin',
   phone: '+90 541 383 62 44',
   email: 'info@avukatramazansahin.com.tr',
-  address: 'Hacı İlyas Mahallesi 4. Tan Sokak No:6 Kanburoğlu Kardeşler İş Hanı Kat: 3 Daire: 10 No: 302 Osmangazi/Bursa',
+  address,
+  // Google'ın evrensel harita bağlantısı: telefonda Google Maps uygulaması
+  // yüklüyse otomatik olarak onu açar, yoksa tarayıcıda haritayı gösterir.
+  mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`,
 }
 
 export const values = [

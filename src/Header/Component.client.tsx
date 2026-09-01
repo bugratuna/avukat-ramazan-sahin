@@ -54,7 +54,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         hasAdminBar ? 'top-10' : 'top-0',
         transparent ? 'bg-transparent' : 'bg-navy shadow-sm',
       )}
-      {...(theme ? { 'data-theme': theme } : {})}
+      data-theme="dark"
     >
       {/* Üst bilgi çubuğu */}
       <div

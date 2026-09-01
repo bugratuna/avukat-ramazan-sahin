@@ -45,7 +45,16 @@ export async function Footer() {
             İletişim
           </h2>
           <ul className="flex flex-col gap-2 text-sm text-navy-foreground/80">
-            <li>{firmInfo.address}</li>
+            <li>
+              <a
+                className="hover:text-gold"
+                href={firmInfo.mapsUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {firmInfo.address}
+              </a>
+            </li>
             <li>
               <a className="hover:text-gold" href={`tel:${firmInfo.phone.replace(/\s/g, '')}`}>
                 {firmInfo.phone}
