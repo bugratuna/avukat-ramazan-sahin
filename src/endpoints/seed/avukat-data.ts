@@ -198,6 +198,10 @@ export const firmInfo = {
   // Google'ın evrensel harita bağlantısı: telefonda Google Maps uygulaması
   // yüklüyse otomatik olarak onu açar, yoksa tarayıcıda haritayı gösterir.
   mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`,
+  // Gömülü harita (iframe) için sadeleştirilmiş sorgu — tam adresteki
+  // kat/daire detayları Google'ın geocoding'ini şaşırtıp haritayı tüm
+  // Türkiye'yi kapsayacak şekilde uzaklaştırıyordu.
+  mapQuery: 'Kanburoğlu Kardeşler İş Hanı, Osmangazi, Bursa',
 }
 
 export const values = [

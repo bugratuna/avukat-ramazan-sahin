@@ -208,7 +208,7 @@ export interface Page {
      */
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | LocationMapBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -781,6 +781,19 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationMapBlock".
+ */
+export interface LocationMapBlock {
+  /**
+   * Boş bırakılırsa büronun varsayılan adresi kullanılır.
+   */
+  address?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'locationMap';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1088,6 +1101,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        locationMap?: T | LocationMapBlockSelect<T>;
       };
   meta?:
     | T
@@ -1184,6 +1198,15 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationMapBlock_select".
+ */
+export interface LocationMapBlockSelect<T extends boolean = true> {
+  address?: T;
   id?: T;
   blockName?: T;
 }

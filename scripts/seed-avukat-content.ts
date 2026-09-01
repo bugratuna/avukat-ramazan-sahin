@@ -141,14 +141,69 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     })
   }
 
+  // --- Kurumsal fotoğraflar (Unsplash, serbest lisans) -----------------
+  const ensureMedia = async (alt: string, fileName: string) => {
+    const { docs } = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+    if (docs[0]) return docs[0]
+    return payload.create({ collection: 'media', data: { alt }, filePath: path.resolve(dirname, fileName) })
+  }
+
+  // Her faaliyet alanı, konusuna en yakın gerçek fotoğraf kategorisiyle
+  // eşleştirilir (tekil/özel foto yerine anlamlı temalar — adliye binası,
+  // kurumsal lobi, ev/aile, evrak-hesap, bina, ofis, teknoloji, resmi bina).
+  const practiceAreaPhotos = {
+    adalet: await ensureMedia('Adliye binası cephesi', 'bucket1-ceza.jpg'),
+    kurumsal: await ensureMedia('Kurumsal lobi', 'bucket2-ticaret.jpg'),
+    aile: await ensureMedia('Ev iç mekan', 'bucket3-aile.jpg'),
+    evrak: await ensureMedia('Masada evrak ve hesap makinesi', 'bucket4-icra.jpg'),
+    bina: await ensureMedia('Apartman binası cephesi', 'bucket5-gayrimenkul.jpg'),
+    ofis: await ensureMedia('Ofiste çalışan meslektaşlar', 'bucket6-is.jpg'),
+    teknoloji: await ensureMedia('Klavye yakın çekim', 'bucket7-bilisim.jpg'),
+    resmiBina: await ensureMedia('Bayraklı resmi bina girişi', 'bucket8-yabancilar.jpg'),
+  } as const
+
+  const practiceAreaPhotoMap: Record<string, keyof typeof practiceAreaPhotos> = {
+    'ceza-hukuku': 'adalet',
+    'infaz-hukuku': 'adalet',
+    'anayasa-mahkemesi-bireysel-basvuru': 'adalet',
+    'ticaret-hukuku': 'kurumsal',
+    'sirketler-hukuku': 'kurumsal',
+    'kooperatif-hukuku': 'kurumsal',
+    'deniz-ticaret-hukuku': 'kurumsal',
+    'aile-hukuku': 'aile',
+    'miras-hukuku': 'aile',
+    'icra-iflas-hukuku': 'evrak',
+    'konkordato': 'evrak',
+    'sigorta-hukuku': 'evrak',
+    'vergi-hukuku': 'evrak',
+    'tazminat-hukuku': 'evrak',
+    'sozlesmeler-hukuku': 'evrak',
+    'gayrimenkul-hukuku': 'bina',
+    'insaat-hukuku': 'bina',
+    'kira-hukuku': 'bina',
+    'is-hukuku': 'ofis',
+    'tuketici-hukuku': 'ofis',
+    'tip-hukuku': 'ofis',
+    'spor-hukuku': 'ofis',
+    'vakif-ve-dernekler-hukuku': 'ofis',
+    'bilisim-ve-e-ticaret-hukuku': 'teknoloji',
+    'fikri-ve-sinai-mulkiyet-haklari': 'teknoloji',
+    'marka-ve-patent': 'teknoloji',
+    'yabancilar-hukuku': 'resmiBina',
+    'idare-hukuku': 'resmiBina',
+  }
+
   const practiceAreaDocs: Record<string, { id: number | string }> = {}
   for (const area of practiceAreas) {
+    const photoKey = practiceAreaPhotoMap[area.slug]
+    const photo = photoKey ? practiceAreaPhotos[photoKey] : undefined
     const doc = await upsertPost({
       slug: area.slug,
       title: area.title,
       _status: 'published',
       authors: authorId ? [authorId] : undefined,
       categories: [uzmanlikCategory.id],
+      heroImage: photo?.id,
       content: articleRichText([
         { type: 'heading', text: area.subtitle },
         { type: 'paragraph', text: area.body },
@@ -156,6 +211,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       meta: {
         title: area.title,
         description: area.body.slice(0, 155),
+        image: photo?.id,
       },
     })
     practiceAreaDocs[area.slug] = doc
@@ -180,7 +236,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
   // aşağıda); yoksa (yeni/temiz bir ortamda) geçici bir görsele düş —
   // Media içindeki `Media` bileşeni video/görsel ayrımını mimeType'a göre
   // otomatik yapıyor, bu yüzden burada tek yapılan doğru dokümanı seçmek.
-  const videoAlt = 'Ana sayfa hero arka plan videosu — Bursa'
+  const videoAlt = 'Ana sayfa hero arka plan videosu — Bursa drone çekimi'
   const { docs: existingVideo } = await payload.find({
     collection: 'media',
     where: { alt: { equals: videoAlt } },
@@ -202,13 +258,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       data: { alt: placeholderAlt },
       filePath: path.resolve(dirname, 'hero-placeholder.png'),
     }))
-
-  // --- Kurumsal fotoğraflar (Unsplash, serbest lisans) -----------------
-  const ensureMedia = async (alt: string, fileName: string) => {
-    const { docs } = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
-    if (docs[0]) return docs[0]
-    return payload.create({ collection: 'media', data: { alt }, filePath: path.resolve(dirname, fileName) })
-  }
 
   const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
   const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
@@ -266,6 +315,9 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             },
           },
         ],
+      },
+      {
+        blockType: 'locationMap',
       },
     ],
     meta: {

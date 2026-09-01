@@ -41,7 +41,12 @@ export const Card: React.FC<{
     >
       {hasImage && (
         <div className="relative mb-5 aspect-[16/10] w-full overflow-hidden bg-secondary">
-          <Media className="size-full" imgClassName="size-full object-cover" resource={metaImage!} size="33vw" />
+          <Media
+            className="size-full"
+            imgClassName="size-full scale-105 object-cover grayscale transition-[filter,transform] duration-500 ease-out group-hover:scale-100 group-hover:grayscale-0"
+            resource={metaImage!}
+            size="33vw"
+          />
         </div>
       )}
       {showCategories && hasCategories && (

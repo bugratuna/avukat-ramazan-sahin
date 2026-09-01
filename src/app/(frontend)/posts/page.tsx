@@ -19,6 +19,9 @@ export default async function Page() {
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    where: {
+      'categories.slug': { equals: 'blog' },
+    },
     select: {
       title: true,
       slug: true,
