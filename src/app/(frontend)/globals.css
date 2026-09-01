@@ -45,6 +45,11 @@
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
   --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-fraunces);
+  --color-gold: oklch(74% 0.11 75deg);
+  --color-gold-foreground: oklch(22% 0.02 75deg);
+  --color-navy: oklch(15% 0.028 258deg);
+  --color-navy-foreground: oklch(96% 0.008 90deg);
 }
 
 @layer utilities {
@@ -87,25 +92,25 @@
 }
 
 :root {
-  --background: oklch(100% 0 0deg);
-  --foreground: oklch(14.5% 0 0deg);
-  --card: oklch(96.5% 0.005 265deg);
-  --card-foreground: oklch(14.5% 0 0deg);
-  --popover: oklch(100% 0 0deg);
-  --popover-foreground: oklch(14.5% 0 0deg);
-  --primary: oklch(20.5% 0 0deg);
-  --primary-foreground: oklch(98.5% 0 0deg);
-  --secondary: oklch(97% 0 0deg);
-  --secondary-foreground: oklch(20.5% 0 0deg);
-  --muted: oklch(97% 0 0deg);
-  --muted-foreground: oklch(55.6% 0 0deg);
-  --accent: oklch(97% 0 0deg);
-  --accent-foreground: oklch(20.5% 0 0deg);
+  --background: oklch(99% 0.005 85deg);
+  --foreground: oklch(19% 0.025 258deg);
+  --card: oklch(97.5% 0.007 82deg);
+  --card-foreground: oklch(19% 0.025 258deg);
+  --popover: oklch(99% 0.004 85deg);
+  --popover-foreground: oklch(19% 0.025 258deg);
+  --primary: oklch(22% 0.045 258deg);
+  --primary-foreground: oklch(98.5% 0.003 258deg);
+  --secondary: oklch(95.5% 0.009 80deg);
+  --secondary-foreground: oklch(22% 0.045 258deg);
+  --muted: oklch(95.5% 0.009 80deg);
+  --muted-foreground: oklch(42% 0.02 260deg);
+  --accent: oklch(95.5% 0.009 80deg);
+  --accent-foreground: oklch(22% 0.045 258deg);
   --destructive: oklch(57.7% 0.245 27.325deg);
   --destructive-foreground: oklch(57.7% 0.245 27.325deg);
-  --border: oklch(92.2% 0 0deg);
-  --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+  --border: oklch(90% 0.012 80deg);
+  --input: oklch(90% 0.012 80deg);
+  --ring: oklch(70.8% 0.02 258deg);
   --chart-1: oklch(64.6% 0.222 41.116deg);
   --chart-2: oklch(60% 0.118 184.704deg);
   --chart-3: oklch(39.8% 0.07 227.392deg);
@@ -126,25 +131,25 @@
 }
 
 [data-theme='dark'] {
-  --background: oklch(14.5% 0 0deg);
-  --foreground: oklch(98.5% 0 0deg);
-  --card: oklch(17% 0 0deg);
-  --card-foreground: oklch(98.5% 0 0deg);
-  --popover: oklch(14.5% 0 0deg);
-  --popover-foreground: oklch(98.5% 0 0deg);
-  --primary: oklch(98.5% 0 0deg);
-  --primary-foreground: oklch(20.5% 0 0deg);
-  --secondary: oklch(26.9% 0 0deg);
-  --secondary-foreground: oklch(98.5% 0 0deg);
-  --muted: oklch(26.9% 0 0deg);
-  --muted-foreground: oklch(70.8% 0 0deg);
-  --accent: oklch(26.9% 0 0deg);
-  --accent-foreground: oklch(98.5% 0 0deg);
+  --background: oklch(15% 0.028 258deg);
+  --foreground: oklch(96% 0.008 90deg);
+  --card: oklch(19% 0.032 258deg);
+  --card-foreground: oklch(96% 0.008 90deg);
+  --popover: oklch(15% 0.028 258deg);
+  --popover-foreground: oklch(96% 0.008 90deg);
+  --primary: oklch(96% 0.008 90deg);
+  --primary-foreground: oklch(19% 0.032 258deg);
+  --secondary: oklch(24% 0.032 258deg);
+  --secondary-foreground: oklch(96% 0.008 90deg);
+  --muted: oklch(24% 0.032 258deg);
+  --muted-foreground: oklch(68% 0.02 258deg);
+  --accent: oklch(24% 0.032 258deg);
+  --accent-foreground: oklch(96% 0.008 90deg);
   --destructive: oklch(39.6% 0.141 25.723deg);
   --destructive-foreground: oklch(63.7% 0.237 25.331deg);
-  --border: oklch(26.9% 0 0deg);
-  --input: oklch(26.9% 0 0deg);
-  --ring: oklch(43.9% 0 0deg);
+  --border: oklch(28% 0.032 258deg);
+  --input: oklch(28% 0.032 258deg);
+  --ring: oklch(50% 0.03 258deg);
   --chart-1: oklch(48.8% 0.243 264.376deg);
   --chart-2: oklch(69.6% 0.17 162.48deg);
   --chart-3: oklch(76.9% 0.188 70.08deg);
@@ -221,4 +226,34 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+@keyframes rs-loader-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rs-loader-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
 }

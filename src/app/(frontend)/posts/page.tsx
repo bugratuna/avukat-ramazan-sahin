@@ -19,6 +19,9 @@ export default async function Page() {
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    where: {
+      'categories.slug': { equals: 'blog' },
+    },
     select: {
       title: true,
       slug: true,
@@ -28,12 +31,10 @@ export default async function Page() {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pb-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
-        </div>
+        <h1 className="font-serif text-4xl font-normal md:text-5xl">Makaleler</h1>
       </div>
 
       <div className="container mb-8">
@@ -58,6 +59,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Blog | Ramazan Şahin Hukuk Bürosu`,
+    title: `Makaleler | Ramazan Şahin Hukuk Bürosu`,
   }
 }

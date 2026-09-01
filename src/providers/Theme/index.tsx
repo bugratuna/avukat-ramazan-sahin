@@ -34,17 +34,14 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   useEffect(() => {
+    // Bilinçli tasarım: ilk ziyarette sistem koyu tema tercihini takip
+    // etmiyoruz, kullanıcı seçiciden bilinçli olarak "Koyu" ya da "Otomatik"
+    // seçmediği sürece marka için tasarlanan açık tema gösteriliyor.
     let themeToSet: Theme = defaultTheme
     const preference = window.localStorage.getItem(themeLocalStorageKey)
 
     if (themeIsValid(preference)) {
       themeToSet = preference
-    } else {
-      const implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
     }
 
     document.documentElement.setAttribute('data-theme', themeToSet)

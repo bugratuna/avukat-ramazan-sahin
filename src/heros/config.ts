@@ -17,26 +17,34 @@ export const hero: Field = {
       name: 'type',
       type: 'select',
       defaultValue: 'lowImpact',
-      label: 'Type',
+      label: 'Hero Türü',
       options: [
         {
-          label: 'None',
+          label: 'Yok',
           value: 'none',
         },
         {
-          label: 'High Impact',
+          label: 'Video/Görsel Arka Planlı (Büyük)',
           value: 'highImpact',
         },
         {
-          label: 'Medium Impact',
+          label: 'Görsel Yanda (Orta)',
           value: 'mediumImpact',
         },
         {
-          label: 'Low Impact',
+          label: 'Sade Metin (Küçük)',
           value: 'lowImpact',
         },
       ],
       required: true,
+    },
+    {
+      name: 'eyebrow',
+      type: 'text',
+      admin: {
+        description: 'Başlığın üstünde görünen küçük vurgu metni (opsiyonel).',
+      },
+      label: 'Üst Vurgu Metni',
     },
     {
       name: 'richText',
@@ -63,7 +71,9 @@ export const hero: Field = {
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        description: 'Görsel veya video (mp4) yükleyebilirsiniz — video otomatik döngüye alınır.',
       },
+      label: 'Arka Plan Görseli/Videosu',
       relationTo: 'media',
       required: true,
     },

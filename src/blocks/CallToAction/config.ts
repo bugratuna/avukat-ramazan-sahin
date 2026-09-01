@@ -36,7 +36,7 @@ export const CallToAction: Block = {
     }),
   ],
   labels: {
-    plural: 'Calls to Action',
-    singular: 'Call to Action',
+    plural: 'Çağrı Blokları',
+    singular: 'Çağrı Bloğu',
   },
 }

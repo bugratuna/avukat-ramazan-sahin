@@ -6,10 +6,14 @@
  *
  * Çalıştırma: npx payload run scripts/seed-avukat-content.ts
  */
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import { practiceAreas, firmInfo, values, faq, konkordatoArticle, type ArticleBlock } from '../src/endpoints/seed/avukat-data'
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // --- Lexical düz metin yardımcıları -----------------------------------
 
@@ -100,14 +104,24 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
   // --- Kategoriler -------------------------------------------------
   const ensureCategory = async (title: string, slug: string) => {
     const { docs } = await payload.find({ collection: 'categories', where: { slug: { equals: slug } }, limit: 1 })
-    if (docs[0]) return docs[0]
+    if (docs[0]) {
+      if (docs[0].title !== title) {
+        return payload.update({
+          collection: 'categories',
+          id: docs[0].id,
+          data: { title },
+          context: { disableRevalidate: true },
+        })
+      }
+      return docs[0]
+    }
     return payload.create({ collection: 'categories', data: { title, slug } })
   }
 
-  const uzmanlikCategory = await ensureCategory('Uzmanlık Alanları', 'uzmanlik-alanlari')
-  const blogCategory = await ensureCategory('Blog', 'blog')
+  const uzmanlikCategory = await ensureCategory('Faaliyet Alanları', 'uzmanlik-alanlari')
+  const blogCategory = await ensureCategory('Makaleler', 'blog')
 
-  // --- Uzmanlık alanları (Posts) ------------------------------------
+  // --- Faaliyet alanları (Posts) ------------------------------------
   const upsertPost = async (data: Record<string, unknown> & { slug: string }) => {
     const { docs } = await payload.find({ collection: 'posts', where: { slug: { equals: data.slug } }, limit: 1 })
     if (docs[0]) {
@@ -127,21 +141,66 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     })
   }
 
+  // --- Kurumsal fotoğraflar (Unsplash, serbest lisans) -----------------
+  const ensureMedia = async (alt: string, fileName: string) => {
+    const { docs } = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+    if (docs[0]) return docs[0]
+    return payload.create({ collection: 'media', data: { alt }, filePath: path.resolve(dirname, fileName) })
+  }
+
+  // Her faaliyet alanının kendine özgü, konusuyla doğrudan ilişkili gerçek
+  // bir fotoğrafı var (tekrar eden/ödünç temalar yerine).
+  const practiceAreaPhotoInfo: Record<string, { alt: string; file: string }> = {
+    'ceza-hukuku': { alt: 'Adliye binası cephesi', file: 'ceza.jpg' },
+    'infaz-hukuku': { alt: 'Adliye koridoru sütunları', file: 'infaz.jpg' },
+    'anayasa-mahkemesi-bireysel-basvuru': { alt: 'Yüksek mahkeme binası', file: 'anayasa.jpg' },
+    'ticaret-hukuku': { alt: 'Kurumsal lobi', file: 'ticaret.jpg' },
+    'sirketler-hukuku': { alt: 'Uzun toplantı masası', file: 'sirketler.jpg' },
+    'kooperatif-hukuku': { alt: 'Tarımsal kooperatif silosu', file: 'kooperatif.jpg' },
+    'deniz-ticaret-hukuku': { alt: 'Liman vinçleri', file: 'denizticaret.jpg' },
+    'aile-hukuku': { alt: 'Ev iç mekan', file: 'aile.jpg' },
+    'miras-hukuku': { alt: 'Eski bir anahtar', file: 'miras.jpg' },
+    'icra-iflas-hukuku': { alt: 'Masada evrak ve hesap makinesi', file: 'icraiflas.jpg' },
+    konkordato: { alt: 'İstiflenmiş dosya klasörleri', file: 'konkordato.jpg' },
+    'sigorta-hukuku': { alt: 'Çelik kasa kapısı', file: 'sigorta.jpg' },
+    'vergi-hukuku': { alt: 'Vergi formları ve masa', file: 'vergi.jpg' },
+    'tazminat-hukuku': { alt: 'Evrak yığını üzerinde kalem', file: 'tazminat.jpg' },
+    'sozlesmeler-hukuku': { alt: 'Formu dolduran el', file: 'sozlesmeler.jpg' },
+    'gayrimenkul-hukuku': { alt: 'Apartman binası cephesi', file: 'gayrimenkul.jpg' },
+    'insaat-hukuku': { alt: 'İnşaat halindeki bina ve vinç', file: 'insaat.jpg' },
+    'kira-hukuku': { alt: 'Kapıdaki anahtar', file: 'kira.jpg' },
+    'is-hukuku': { alt: 'Ofiste çalışan meslektaşlar', file: 'is.jpg' },
+    'tuketici-hukuku': { alt: 'Market kasaları', file: 'tuketici.jpg' },
+    'tip-hukuku': { alt: 'Hastane koridoru', file: 'tip.jpg' },
+    'vakif-ve-dernekler-hukuku': { alt: 'Tarihi taş kemerli giriş', file: 'vakif.jpg' },
+    'spor-hukuku': { alt: 'Futbol sahası', file: 'spor.jpg' },
+    'bilisim-ve-e-ticaret-hukuku': { alt: 'Klavye yakın çekim', file: 'bilisim.jpg' },
+    'fikri-ve-sinai-mulkiyet-haklari': { alt: 'Teknik çizim üzerinde cihaz', file: 'fikrisinai.jpg' },
+    'marka-ve-patent': { alt: 'Ahşap mühür', file: 'markapatent.jpg' },
+    'yabancilar-hukuku': { alt: 'Pasaport ve fotoğraf makinesi', file: 'yabancilar.jpg' },
+    'idare-hukuku': { alt: 'Bayraklı resmi bina girişi', file: 'idare.jpg' },
+  }
+
   const practiceAreaDocs: Record<string, { id: number | string }> = {}
   for (const area of practiceAreas) {
+    const photoInfo = practiceAreaPhotoInfo[area.slug]
+    const photo = photoInfo ? await ensureMedia(photoInfo.alt, photoInfo.file) : undefined
     const doc = await upsertPost({
       slug: area.slug,
       title: area.title,
       _status: 'published',
       authors: authorId ? [authorId] : undefined,
       categories: [uzmanlikCategory.id],
+      heroImage: photo?.id,
       content: articleRichText([
         { type: 'heading', text: area.subtitle },
         { type: 'paragraph', text: area.body },
+        ...area.details,
       ]),
       meta: {
         title: area.title,
         description: area.body.slice(0, 155),
+        image: photo?.id,
       },
     })
     practiceAreaDocs[area.slug] = doc
@@ -160,6 +219,37 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       description: konkordatoArticle.intro,
     },
   })
+
+  // --- Ana sayfa hero arka planı ---------------------------------------
+  // Gerçek Bursa videosu zaten yüklenmişse onu kullan (bkz. video alt metni
+  // aşağıda); yoksa (yeni/temiz bir ortamda) geçici bir görsele düş —
+  // Media içindeki `Media` bileşeni video/görsel ayrımını mimeType'a göre
+  // otomatik yapıyor, bu yüzden burada tek yapılan doğru dokümanı seçmek.
+  const videoAlt = 'Ana sayfa hero arka plan videosu — Bursa drone çekimi'
+  const { docs: existingVideo } = await payload.find({
+    collection: 'media',
+    where: { alt: { equals: videoAlt } },
+    limit: 1,
+  })
+
+  const placeholderAlt = 'Ana sayfa hero arka planı (geçici — gerçek Bursa görseliyle değiştirilecek)'
+  const heroMedia =
+    existingVideo[0] ||
+    (
+      await payload.find({
+        collection: 'media',
+        where: { alt: { equals: placeholderAlt } },
+        limit: 1,
+      })
+    ).docs[0] ||
+    (await payload.create({
+      collection: 'media',
+      data: { alt: placeholderAlt },
+      filePath: path.resolve(dirname, 'hero-placeholder.png'),
+    }))
+
+  const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
+  const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
 
   // --- Sayfalar -------------------------------------------------------
   const upsertPage = async (data: Record<string, unknown> & { slug: string }) => {
@@ -194,16 +284,23 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     },
     layout: [
       {
-        blockType: 'content',
-        columns: [
+        blockType: 'contactInfo',
+      },
+      {
+        blockType: 'locationMap',
+      },
+      {
+        blockType: 'cta',
+        richText: richTextRoot([headingNode('Randevu talebiniz için hemen arayın', 'h2')]),
+        links: [
           {
-            size: 'full',
-            richText: richTextRoot([
-              headingNode('Bize Ulaşın', 'h2'),
-              paragraphNode(`Adres: ${firmInfo.address}`),
-              paragraphNode(`Telefon: ${firmInfo.phone}`),
-              paragraphNode(`E-posta: ${firmInfo.email}`),
-            ]),
+            link: {
+              type: 'custom',
+              url: `tel:${firmInfo.phone.replace(/\s/g, '')}`,
+              label: firmInfo.phone,
+              newTab: false,
+              appearance: 'default',
+            },
           },
         ],
       },
@@ -239,6 +336,10 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             ]),
           },
         ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: meetingRoomMedia.id,
       },
       {
         blockType: 'content',
@@ -292,12 +393,12 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
 
   const uzmanlikPage = await upsertPage({
     slug: 'uzmanlik-alanlarimiz',
-    title: 'Uzmanlık Alanlarımız',
+    title: 'Faaliyet Alanlarımız',
     _status: 'published',
     hero: {
       type: 'lowImpact',
       richText: richTextRoot([
-        headingNode('Uzmanlık Alanlarımız', 'h1'),
+        headingNode('Faaliyet Alanlarımız', 'h1'),
         paragraphNode(`${firmInfo.name}, ${practiceAreas.length} farklı hukuk alanında müvekkillerine kapsamlı destek sunmaktadır.`),
       ]),
     },
@@ -311,8 +412,8 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       },
     ],
     meta: {
-      title: 'Uzmanlık Alanlarımız',
-      description: `${firmInfo.name} uzmanlık alanları: ceza, aile, ticaret, icra-iflas, gayrimenkul hukuku ve daha fazlası.`,
+      title: 'Faaliyet Alanlarımız',
+      description: `${firmInfo.name} faaliyet alanları: ceza, aile, ticaret, icra-iflas, gayrimenkul hukuku ve daha fazlası.`,
     },
   })
 
@@ -321,9 +422,11 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     title: 'Ana Sayfa',
     _status: 'published',
     hero: {
-      type: 'lowImpact',
+      type: 'highImpact',
+      eyebrow: 'Bursa Avukatlık ve Hukuk Bürosu',
+      media: heroMedia?.id,
       richText: richTextRoot([
-        headingNode(firmInfo.name, 'h1'),
+        headingNode('Güvenilir Hukuki Çözümler, Kararlı Savunma', 'h1'),
         paragraphNode(
           'Sürekli güncellenen mevzuat bilgimiz ve stratejik bakış açımızla, hukuki süreçlerinizi en doğru şekilde yöneterek güvenilir çözümler üretiyoruz.',
         ),
@@ -342,7 +445,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
           link: {
             type: 'reference',
             reference: { relationTo: 'pages', value: uzmanlikPage.id },
-            label: 'Uzmanlık Alanlarımız',
+            label: 'Faaliyet Alanlarımız',
             newTab: false,
             appearance: 'outline',
           },
@@ -373,12 +476,64 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         ],
       },
       {
+        blockType: 'mediaBlock',
+        media: officeBuildingMedia.id,
+      },
+      {
         blockType: 'archive',
-        introContent: richTextRoot([headingNode('Uzmanlık Alanlarımız', 'h2')]),
+        introContent: richTextRoot([headingNode('Faaliyet Alanlarımız', 'h2')]),
         populateBy: 'collection',
         relationTo: 'posts',
         categories: [uzmanlikCategory.id],
         limit: 6,
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode(`${practiceAreas.length} Farklı Hukuk Alanında Uzmanlık`, 'h2'),
+              paragraphNode(
+                'Ceza, aile, ticaret, icra-iflas, gayrimenkul, iş, miras ve daha birçok alanda tek bir büroda kapsamlı hukuki destek alırsınız. Hangi alanda ihtiyacınız olursa olsun, doğru uzmanlık alanına yönlendirilirsiniz.',
+              ),
+            ]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Neden Ramazan Şahin Hukuk Bürosu?', 'h2'),
+              ...values.flatMap((v) => [headingNode(v.title, 'h3'), paragraphNode(v.text)]),
+            ]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Sıkça Sorulan Sorular', 'h2'),
+              ...faq
+                .slice(0, 3)
+                .flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)]),
+            ]),
+            enableLink: true,
+            link: {
+              type: 'reference',
+              reference: { relationTo: 'pages', value: hakkimizdaPage.id },
+              label: 'Tüm Soruları Görüntüle',
+              newTab: false,
+              appearance: 'outline',
+            },
+          },
+        ],
       },
       {
         blockType: 'cta',
@@ -410,8 +565,8 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     data: {
       navItems: [
         { link: { type: 'reference', reference: { relationTo: 'pages', value: hakkimizdaPage.id }, label: 'Hakkımızda', newTab: false } },
-        { link: { type: 'reference', reference: { relationTo: 'pages', value: uzmanlikPage.id }, label: 'Uzmanlık Alanlarımız', newTab: false } },
-        { link: { type: 'custom', url: '/posts', label: 'Blog', newTab: false } },
+        { link: { type: 'reference', reference: { relationTo: 'pages', value: uzmanlikPage.id }, label: 'Faaliyet Alanlarımız', newTab: false } },
+        { link: { type: 'custom', url: '/posts', label: 'Makaleler', newTab: false } },
         { link: { type: 'reference', reference: { relationTo: 'pages', value: iletisimPage.id }, label: 'İletişim', newTab: false } },
       ],
     },
@@ -423,7 +578,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     data: {
       navItems: [
         { link: { type: 'reference', reference: { relationTo: 'pages', value: hakkimizdaPage.id }, label: 'Hakkımızda', newTab: false } },
-        { link: { type: 'reference', reference: { relationTo: 'pages', value: uzmanlikPage.id }, label: 'Uzmanlık Alanlarımız', newTab: false } },
+        { link: { type: 'reference', reference: { relationTo: 'pages', value: uzmanlikPage.id }, label: 'Faaliyet Alanlarımız', newTab: false } },
         { link: { type: 'reference', reference: { relationTo: 'pages', value: iletisimPage.id }, label: 'İletişim', newTab: false } },
         { link: { type: 'custom', url: `tel:${firmInfo.phone.replace(/\s/g, '')}`, label: firmInfo.phone, newTab: false } },
       ],

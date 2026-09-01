@@ -4,8 +4,10 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { ContactInfo } from '../../blocks/ContactInfo/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { LocationMap } from '../../blocks/LocationMap/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
@@ -23,6 +25,10 @@ import {
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: 'Sayfa',
+    plural: 'Sayfalar',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -58,6 +64,7 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'title',
       type: 'text',
+      label: 'Başlık',
       required: true,
     },
     {
@@ -65,21 +72,22 @@ export const Pages: CollectionConfig<'pages'> = {
       tabs: [
         {
           fields: [hero],
-          label: 'Hero',
+          label: 'Hero Bölümü',
         },
         {
           fields: [
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              label: 'Sayfa Blokları',
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, LocationMap, ContactInfo],
               required: true,
               admin: {
                 initCollapsed: true,
               },
             },
           ],
-          label: 'Content',
+          label: 'İçerik',
         },
         {
           name: 'meta',
@@ -113,6 +121,7 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'publishedAt',
       type: 'date',
+      label: 'Yayın Tarihi',
       admin: {
         position: 'sidebar',
       },

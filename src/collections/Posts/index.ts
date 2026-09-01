@@ -29,6 +29,10 @@ import { slugField } from 'payload'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
+  labels: {
+    singular: 'Makale',
+    plural: 'Makaleler',
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -69,6 +73,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'title',
       type: 'text',
+      label: 'Başlık',
       required: true,
     },
     {
@@ -79,6 +84,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'heroImage',
               type: 'upload',
+              label: 'Kapak Görseli',
               relationTo: 'media',
             },
             {
@@ -100,13 +106,14 @@ export const Posts: CollectionConfig<'posts'> = {
               required: true,
             },
           ],
-          label: 'Content',
+          label: 'İçerik',
         },
         {
           fields: [
             {
               name: 'relatedPosts',
               type: 'relationship',
+              label: 'İlgili Makaleler',
               admin: {
                 position: 'sidebar',
               },
@@ -123,6 +130,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'categories',
               type: 'relationship',
+              label: 'Kategoriler',
               admin: {
                 position: 'sidebar',
               },
@@ -130,7 +138,7 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'categories',
             },
           ],
-          label: 'Meta',
+          label: 'Diğer Bilgiler',
         },
         {
           name: 'meta',
@@ -164,6 +172,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'publishedAt',
       type: 'date',
+      label: 'Yayın Tarihi',
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
@@ -184,6 +193,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'authors',
       type: 'relationship',
+      label: 'Yazarlar',
       admin: {
         position: 'sidebar',
       },

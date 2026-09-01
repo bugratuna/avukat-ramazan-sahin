@@ -16,6 +16,10 @@ const dirname = path.dirname(filename)
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Medya',
+    plural: 'Medya',
+  },
   folders: true,
   access: {
     create: authenticated,
@@ -27,11 +31,13 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
+      label: 'Alternatif Metin',
       //required: true,
     },
     {
       name: 'caption',
       type: 'richText',
+      label: 'Açıklama',
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
