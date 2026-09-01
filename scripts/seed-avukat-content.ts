@@ -425,6 +425,54 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         limit: 6,
       },
       {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode(`${practiceAreas.length} Farklı Hukuk Alanında Uzmanlık`, 'h2'),
+              paragraphNode(
+                'Ceza, aile, ticaret, icra-iflas, gayrimenkul, iş, miras ve daha birçok alanda tek bir büroda kapsamlı hukuki destek alırsınız. Hangi alanda ihtiyacınız olursa olsun, doğru uzmanlık alanına yönlendirilirsiniz.',
+              ),
+            ]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Neden Ramazan Şahin Hukuk Bürosu?', 'h2'),
+              ...values.flatMap((v) => [headingNode(v.title, 'h3'), paragraphNode(v.text)]),
+            ]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Sıkça Sorulan Sorular', 'h2'),
+              ...faq
+                .slice(0, 3)
+                .flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)]),
+            ]),
+            enableLink: true,
+            link: {
+              type: 'reference',
+              reference: { relationTo: 'pages', value: hakkimizdaPage.id },
+              label: 'Tüm Soruları Görüntüle',
+              newTab: false,
+              appearance: 'outline',
+            },
+          },
+        ],
+      },
+      {
         blockType: 'cta',
         richText: richTextRoot([headingNode('Hukuki danışmanlık ve randevu talepleriniz için bize ulaşın', 'h2')]),
         links: [

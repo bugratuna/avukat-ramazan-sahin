@@ -12,7 +12,7 @@ import RichText from '@/components/RichText'
 const ArrowIcon = () => (
   <svg
     aria-hidden="true"
-    className="size-4"
+    className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
     fill="none"
     stroke="currentColor"
     strokeWidth={2}
@@ -24,9 +24,9 @@ const ArrowIcon = () => (
 
 const pillClasses: Record<string, string> = {
   default:
-    'group inline-flex items-center gap-3 rounded-full bg-white py-2 pl-6 pr-2 text-sm font-medium text-black transition-colors hover:bg-white/90',
+    'group inline-flex items-center gap-2.5 rounded-md bg-white px-6 py-3 text-sm font-medium text-navy transition-colors hover:bg-white/90',
   outline:
-    'group inline-flex items-center gap-3 rounded-full border border-white/40 py-2 pl-6 pr-2 text-sm font-medium text-white transition-colors hover:border-white hover:bg-white/10',
+    'group inline-flex items-center gap-2.5 rounded-md border border-white/50 px-6 py-3 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white/10',
 }
 
 const enterClasses = (visible: boolean) =>
@@ -98,9 +98,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
                       className={pillClasses[appearance || 'default']}
                     >
                       <span>{label}</span>
-                      <span className="flex size-8 items-center justify-center rounded-full bg-gold text-gold-foreground transition-transform group-hover:translate-x-0.5">
-                        <ArrowIcon />
-                      </span>
+                      <ArrowIcon />
                     </CMSLink>
                   </li>
                 )

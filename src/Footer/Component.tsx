@@ -61,11 +61,14 @@ export async function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container flex flex-col-reverse items-center justify-between gap-2 py-6 text-xs text-navy-foreground/60 md:flex-row">
+        <div className="container flex flex-col-reverse items-center justify-between gap-3 py-6 text-xs text-navy-foreground/60 md:flex-row">
           <p>
             © {year} {firmInfo.name}. Tüm hakları saklıdır.
           </p>
-          <ThemeSelector />
+          <div className="flex items-center gap-4">
+            <ThemeSelector />
+            <Logo className="text-navy-foreground/70" iconOnly />
+          </div>
         </div>
       </div>
     </footer>
