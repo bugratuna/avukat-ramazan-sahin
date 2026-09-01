@@ -203,6 +203,16 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       filePath: path.resolve(dirname, 'hero-placeholder.png'),
     }))
 
+  // --- Kurumsal fotoğraflar (Unsplash, serbest lisans) -----------------
+  const ensureMedia = async (alt: string, fileName: string) => {
+    const { docs } = await payload.find({ collection: 'media', where: { alt: { equals: alt } }, limit: 1 })
+    if (docs[0]) return docs[0]
+    return payload.create({ collection: 'media', data: { alt }, filePath: path.resolve(dirname, fileName) })
+  }
+
+  const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
+  const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
+
   // --- Sayfalar -------------------------------------------------------
   const upsertPage = async (data: Record<string, unknown> & { slug: string }) => {
     const { docs } = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
@@ -281,6 +291,10 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             ]),
           },
         ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: meetingRoomMedia.id,
       },
       {
         blockType: 'content',
@@ -415,6 +429,10 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             },
           },
         ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: officeBuildingMedia.id,
       },
       {
         blockType: 'archive',

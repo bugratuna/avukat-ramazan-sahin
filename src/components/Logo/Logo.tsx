@@ -62,38 +62,49 @@ const Mark: React.FC<{ className?: string }> = ({ className }) => (
 )
 
 /**
- * Marka logosu: köşeli çerçeve + "RŞ" işareti + yazı işareti (wordmark).
- * Koyu (lacivert) zeminler üzerinde kullanılmak üzere tasarlandı (header,
- * footer). `public/logo.png` eklenirse (gerçek kurumsal logo dosyası)
- * otomatik olarak onu kullanır — başka bir kod değişikliği gerekmez.
+ * Marka simgesi: gerçek kurumsal logodan kırpılmış "RŞ" köşeli-çerçeve
+ * işareti (`public/logo.png`, dikey/portre oranlı). Görsel yüklenemezse
+ * aynı kompozisyonu yeniden üreten elle çizilmiş SVG'ye (`Mark`) düşer.
  */
-export const Logo = ({ className, loading = 'lazy', priority = 'low', iconOnly = false }: Props) => {
+const Icon: React.FC<{
+  className?: string
+  loading: 'lazy' | 'eager'
+  priority: 'auto' | 'high' | 'low'
+}> = ({ className, loading, priority }) => {
   const [imageFailed, setImageFailed] = useState(false)
 
-  if (!imageFailed) {
-    return (
-      <span className={cn('relative inline-block h-10 w-[9.5rem]', className)}>
-        <Image
-          alt="Avukat Ramazan Şahin Hukuk ve Danışmanlık"
-          className="object-contain object-left"
-          fetchPriority={priority === 'auto' ? undefined : priority}
-          fill
-          loading={loading}
-          onError={() => setImageFailed(true)}
-          sizes="152px"
-          src="/logo.png"
-        />
-      </span>
-    )
-  }
-
-  if (iconOnly) {
+  if (imageFailed) {
     return <Mark className={cn('size-9 text-white', className)} />
   }
 
   return (
+    <span className={cn('relative inline-block h-9 w-[1.72rem]', className)}>
+      <Image
+        alt=""
+        className="object-contain"
+        fetchPriority={priority === 'auto' ? undefined : priority}
+        fill
+        loading={loading}
+        onError={() => setImageFailed(true)}
+        sizes="28px"
+        src="/logo.png"
+      />
+    </span>
+  )
+}
+
+/**
+ * Marka logosu: gerçek "RŞ" işareti + yazı işareti (wordmark). Koyu
+ * (lacivert) zeminler üzerinde kullanılmak üzere tasarlandı (header, footer).
+ */
+export const Logo = ({ className, loading = 'lazy', priority = 'low', iconOnly = false }: Props) => {
+  if (iconOnly) {
+    return <Icon className={cn('h-9 w-[1.72rem]', className)} loading={loading} priority={priority} />
+  }
+
+  return (
     <span className={cn('inline-flex items-center gap-2.5 text-current', className)}>
-      <Mark className="size-10 text-white" />
+      <Icon loading={loading} priority={priority} />
       <span className="leading-tight whitespace-nowrap">
         <span className="block text-[0.6rem] font-medium tracking-[0.25em] text-gold uppercase">
           Avukat
