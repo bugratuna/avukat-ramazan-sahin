@@ -4,6 +4,7 @@ import type { Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { ContactInfoBlock } from '@/blocks/ContactInfo/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { LocationMapBlock } from '@/blocks/LocationMap/Component'
@@ -12,6 +13,7 @@ import { Reveal } from '@/components/Reveal'
 
 const blockComponents = {
   archive: ArchiveBlock,
+  contactInfo: ContactInfoBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,

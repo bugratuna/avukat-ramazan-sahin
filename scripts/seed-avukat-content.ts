@@ -148,55 +148,43 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     return payload.create({ collection: 'media', data: { alt }, filePath: path.resolve(dirname, fileName) })
   }
 
-  // Her faaliyet alanı, konusuna en yakın gerçek fotoğraf kategorisiyle
-  // eşleştirilir (tekil/özel foto yerine anlamlı temalar — adliye binası,
-  // kurumsal lobi, ev/aile, evrak-hesap, bina, ofis, teknoloji, resmi bina).
-  const practiceAreaPhotos = {
-    adalet: await ensureMedia('Adliye binası cephesi', 'bucket1-ceza.jpg'),
-    kurumsal: await ensureMedia('Kurumsal lobi', 'bucket2-ticaret.jpg'),
-    aile: await ensureMedia('Ev iç mekan', 'bucket3-aile.jpg'),
-    evrak: await ensureMedia('Masada evrak ve hesap makinesi', 'bucket4-icra.jpg'),
-    bina: await ensureMedia('Apartman binası cephesi', 'bucket5-gayrimenkul.jpg'),
-    ofis: await ensureMedia('Ofiste çalışan meslektaşlar', 'bucket6-is.jpg'),
-    teknoloji: await ensureMedia('Klavye yakın çekim', 'bucket7-bilisim.jpg'),
-    resmiBina: await ensureMedia('Bayraklı resmi bina girişi', 'bucket8-yabancilar.jpg'),
-  } as const
-
-  const practiceAreaPhotoMap: Record<string, keyof typeof practiceAreaPhotos> = {
-    'ceza-hukuku': 'adalet',
-    'infaz-hukuku': 'adalet',
-    'anayasa-mahkemesi-bireysel-basvuru': 'adalet',
-    'ticaret-hukuku': 'kurumsal',
-    'sirketler-hukuku': 'kurumsal',
-    'kooperatif-hukuku': 'kurumsal',
-    'deniz-ticaret-hukuku': 'kurumsal',
-    'aile-hukuku': 'aile',
-    'miras-hukuku': 'aile',
-    'icra-iflas-hukuku': 'evrak',
-    'konkordato': 'evrak',
-    'sigorta-hukuku': 'evrak',
-    'vergi-hukuku': 'evrak',
-    'tazminat-hukuku': 'evrak',
-    'sozlesmeler-hukuku': 'evrak',
-    'gayrimenkul-hukuku': 'bina',
-    'insaat-hukuku': 'bina',
-    'kira-hukuku': 'bina',
-    'is-hukuku': 'ofis',
-    'tuketici-hukuku': 'ofis',
-    'tip-hukuku': 'ofis',
-    'spor-hukuku': 'ofis',
-    'vakif-ve-dernekler-hukuku': 'ofis',
-    'bilisim-ve-e-ticaret-hukuku': 'teknoloji',
-    'fikri-ve-sinai-mulkiyet-haklari': 'teknoloji',
-    'marka-ve-patent': 'teknoloji',
-    'yabancilar-hukuku': 'resmiBina',
-    'idare-hukuku': 'resmiBina',
+  // Her faaliyet alanının kendine özgü, konusuyla doğrudan ilişkili gerçek
+  // bir fotoğrafı var (tekrar eden/ödünç temalar yerine).
+  const practiceAreaPhotoInfo: Record<string, { alt: string; file: string }> = {
+    'ceza-hukuku': { alt: 'Adliye binası cephesi', file: 'ceza.jpg' },
+    'infaz-hukuku': { alt: 'Adliye koridoru sütunları', file: 'infaz.jpg' },
+    'anayasa-mahkemesi-bireysel-basvuru': { alt: 'Yüksek mahkeme binası', file: 'anayasa.jpg' },
+    'ticaret-hukuku': { alt: 'Kurumsal lobi', file: 'ticaret.jpg' },
+    'sirketler-hukuku': { alt: 'Uzun toplantı masası', file: 'sirketler.jpg' },
+    'kooperatif-hukuku': { alt: 'Tarımsal kooperatif silosu', file: 'kooperatif.jpg' },
+    'deniz-ticaret-hukuku': { alt: 'Liman vinçleri', file: 'denizticaret.jpg' },
+    'aile-hukuku': { alt: 'Ev iç mekan', file: 'aile.jpg' },
+    'miras-hukuku': { alt: 'Eski bir anahtar', file: 'miras.jpg' },
+    'icra-iflas-hukuku': { alt: 'Masada evrak ve hesap makinesi', file: 'icraiflas.jpg' },
+    konkordato: { alt: 'İstiflenmiş dosya klasörleri', file: 'konkordato.jpg' },
+    'sigorta-hukuku': { alt: 'Çelik kasa kapısı', file: 'sigorta.jpg' },
+    'vergi-hukuku': { alt: 'Vergi formları ve masa', file: 'vergi.jpg' },
+    'tazminat-hukuku': { alt: 'Evrak yığını üzerinde kalem', file: 'tazminat.jpg' },
+    'sozlesmeler-hukuku': { alt: 'Formu dolduran el', file: 'sozlesmeler.jpg' },
+    'gayrimenkul-hukuku': { alt: 'Apartman binası cephesi', file: 'gayrimenkul.jpg' },
+    'insaat-hukuku': { alt: 'İnşaat halindeki bina ve vinç', file: 'insaat.jpg' },
+    'kira-hukuku': { alt: 'Kapıdaki anahtar', file: 'kira.jpg' },
+    'is-hukuku': { alt: 'Ofiste çalışan meslektaşlar', file: 'is.jpg' },
+    'tuketici-hukuku': { alt: 'Market kasaları', file: 'tuketici.jpg' },
+    'tip-hukuku': { alt: 'Hastane koridoru', file: 'tip.jpg' },
+    'vakif-ve-dernekler-hukuku': { alt: 'Tarihi taş kemerli giriş', file: 'vakif.jpg' },
+    'spor-hukuku': { alt: 'Futbol sahası', file: 'spor.jpg' },
+    'bilisim-ve-e-ticaret-hukuku': { alt: 'Klavye yakın çekim', file: 'bilisim.jpg' },
+    'fikri-ve-sinai-mulkiyet-haklari': { alt: 'Teknik çizim üzerinde cihaz', file: 'fikrisinai.jpg' },
+    'marka-ve-patent': { alt: 'Ahşap mühür', file: 'markapatent.jpg' },
+    'yabancilar-hukuku': { alt: 'Pasaport ve fotoğraf makinesi', file: 'yabancilar.jpg' },
+    'idare-hukuku': { alt: 'Bayraklı resmi bina girişi', file: 'idare.jpg' },
   }
 
   const practiceAreaDocs: Record<string, { id: number | string }> = {}
   for (const area of practiceAreas) {
-    const photoKey = practiceAreaPhotoMap[area.slug]
-    const photo = photoKey ? practiceAreaPhotos[photoKey] : undefined
+    const photoInfo = practiceAreaPhotoInfo[area.slug]
+    const photo = photoInfo ? await ensureMedia(photoInfo.alt, photoInfo.file) : undefined
     const doc = await upsertPost({
       slug: area.slug,
       title: area.title,
@@ -295,29 +283,25 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     },
     layout: [
       {
-        blockType: 'content',
-        columns: [
-          {
-            size: 'full',
-            richText: richTextRoot([
-              headingNode('Bize Ulaşın', 'h2'),
-              paragraphNode(`Adres: ${firmInfo.address}`),
-              paragraphNode(`Telefon: ${firmInfo.phone}`),
-              paragraphNode(`E-posta: ${firmInfo.email}`),
-            ]),
-            enableLink: true,
-            link: {
-              type: 'custom',
-              url: firmInfo.mapsUrl,
-              label: 'Google Maps’te Aç',
-              newTab: true,
-              appearance: 'outline',
-            },
-          },
-        ],
+        blockType: 'contactInfo',
       },
       {
         blockType: 'locationMap',
+      },
+      {
+        blockType: 'cta',
+        richText: richTextRoot([headingNode('Randevu talebiniz için hemen arayın', 'h2')]),
+        links: [
+          {
+            link: {
+              type: 'custom',
+              url: `tel:${firmInfo.phone.replace(/\s/g, '')}`,
+              label: firmInfo.phone,
+              newTab: false,
+              appearance: 'default',
+            },
+          },
+        ],
       },
     ],
     meta: {

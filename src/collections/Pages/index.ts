@@ -4,6 +4,7 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { ContactInfo } from '../../blocks/ContactInfo/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { LocationMap } from '../../blocks/LocationMap/config'
@@ -79,7 +80,7 @@ export const Pages: CollectionConfig<'pages'> = {
               name: 'layout',
               type: 'blocks',
               label: 'Sayfa Blokları',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, LocationMap],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, LocationMap, ContactInfo],
               required: true,
               admin: {
                 initCollapsed: true,
