@@ -55,7 +55,13 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
     >
       <div className="absolute inset-0 -z-10 select-none">
         {media && typeof media === 'object' ? (
-          <Media fill imgClassName="object-cover" priority resource={media} videoClassName="size-full object-cover" />
+          <Media
+            fill
+            imgClassName="object-cover"
+            priority
+            resource={media}
+            videoClassName="size-full object-cover grayscale contrast-125 brightness-95"
+          />
         ) : (
           <div className="size-full bg-[radial-gradient(ellipse_at_top_right,_oklch(74%_0.11_75deg_/_25%),_transparent_60%),linear-gradient(to_bottom,_oklch(20%_0.03_255deg),_oklch(10%_0.01_255deg))]" />
         )}

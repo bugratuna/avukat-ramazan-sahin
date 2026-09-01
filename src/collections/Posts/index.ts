@@ -52,7 +52,10 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    components: {
+      beforeList: ['@/components/PostsListFilters'],
+    },
+    defaultColumns: ['title', 'categories', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
