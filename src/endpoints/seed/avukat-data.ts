@@ -820,6 +820,12 @@ export const firmInfo = {
   // kat/daire detayları Google'ın geocoding'ini şaşırtıp haritayı tüm
   // Türkiye'yi kapsayacak şekilde uzaklaştırıyordu.
   mapQuery: 'Kanburoğlu Kardeşler İş Hanı, Osmangazi, Bursa',
+  // Yalnızca gerçekten var olan hesaplar eklenir — eski sitedeki
+  // Facebook/Twitter/YouTube/LinkedIn ikonları hiçbir zaman gerçek bir
+  // hesaba bağlanmamış, boş şablon ikonlarıydı.
+  social: {
+    instagram: 'https://www.instagram.com/av.ramazansahintr/',
+  },
 }
 
 export const values = [

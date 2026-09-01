@@ -14,5 +14,9 @@ import { useHeaderTheme } from '@/providers/HeaderTheme'
 export const MainContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { hasAdminBar } = useHeaderTheme()
 
-  return <main className={cn('pt-30 transition-[padding] duration-300', hasAdminBar && 'pt-40')}>{children}</main>
+  return (
+    <main className={cn('flex-1 pt-30 transition-[padding] duration-300', hasAdminBar && 'pt-40')}>
+      {children}
+    </main>
+  )
 }

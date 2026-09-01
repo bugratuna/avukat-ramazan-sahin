@@ -53,7 +53,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   return (
     <article className="pb-16">
-      <PageClient />
+      <PageClient hasHeroImage={Boolean(post.heroImage && typeof post.heroImage !== 'string')} />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />

@@ -1,4 +1,5 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { Instagram } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -6,6 +7,8 @@ import { firmInfo } from '@/endpoints/seed/avukat-data'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
+
+const socialLinks = [{ Icon: Instagram, label: 'Instagram', url: firmInfo.social.instagram }]
 
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
@@ -66,6 +69,20 @@ export async function Footer() {
               </a>
             </li>
           </ul>
+          <div className="mt-5 flex items-center gap-3">
+            {socialLinks.map(({ Icon, label, url }) => (
+              <a
+                aria-label={label}
+                className="flex size-9 items-center justify-center rounded-full border border-white/15 text-navy-foreground/80 transition-colors hover:border-gold hover:text-gold"
+                href={url}
+                key={label}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Icon className="size-4" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 

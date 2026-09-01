@@ -11,6 +11,7 @@ import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { MainContent } from '@/components/MainContent'
 import { PageLoader } from '@/components/PageLoader'
+import { RouteTransitionLoader } from '@/components/RouteTransitionLoader'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Providers>
           <PageLoader />
+          <RouteTransitionLoader />
           <AdminBar
             adminBarProps={{
               preview: isEnabled,

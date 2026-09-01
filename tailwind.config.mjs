@@ -6,10 +6,12 @@ const config = {
         DEFAULT: {
           css: [
             {
-              '--tw-prose-body': 'var(--foreground)',
-              '--tw-prose-headings': 'var(--foreground)',
-              '--tw-prose-bold': 'var(--foreground)',
-              '--tw-prose-links': 'var(--foreground)',
+              // currentColor: RichText her bağlamda (açık zeminde koyu metin,
+              // lacivert CTA banner'ında açık metin) çevresinden renk almalı.
+              '--tw-prose-body': 'currentColor',
+              '--tw-prose-headings': 'currentColor',
+              '--tw-prose-bold': 'currentColor',
+              '--tw-prose-links': 'currentColor',
               lineHeight: '1.8',
               h1: {
                 fontWeight: 'normal',

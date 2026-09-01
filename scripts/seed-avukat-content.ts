@@ -287,9 +287,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         blockType: 'contactInfo',
       },
       {
-        blockType: 'locationMap',
-      },
-      {
         blockType: 'cta',
         richText: richTextRoot([headingNode('Randevu talebiniz için hemen arayın', 'h2')]),
         links: [
@@ -342,6 +339,23 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         media: meetingRoomMedia.id,
       },
       {
+        blockType: 'cta',
+        richText: richTextRoot([
+          headingNode('Hukuki sorunlarınıza kalıcı çözümler sunmak için buradayız', 'h2'),
+        ]),
+        links: [
+          {
+            link: {
+              type: 'custom',
+              url: `tel:${firmInfo.phone.replace(/\s/g, '')}`,
+              label: firmInfo.phone,
+              newTab: false,
+              appearance: 'default',
+            },
+          },
+        ],
+      },
+      {
         blockType: 'content',
         columns: [
           {
@@ -359,6 +373,10 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             ]),
           },
         ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: officeBuildingMedia.id,
       },
       {
         blockType: 'content',
@@ -381,6 +399,21 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
               headingNode('Sıkça Sorulan Sorular', 'h2'),
               ...faq.flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)]),
             ]),
+          },
+        ],
+      },
+      {
+        blockType: 'cta',
+        richText: richTextRoot([headingNode('Hukuki danışmanlık ve randevu talepleriniz için bize ulaşın', 'h2')]),
+        links: [
+          {
+            link: {
+              type: 'reference',
+              reference: { relationTo: 'pages', value: iletisimPage.id },
+              label: 'Bize Ulaşın',
+              newTab: false,
+              appearance: 'default',
+            },
           },
         ],
       },

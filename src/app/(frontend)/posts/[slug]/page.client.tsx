@@ -2,13 +2,13 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect } from 'react'
 
-const PageClient: React.FC = () => {
-  /* Force the header to be dark mode while we have an image behind it */
+const PageClient: React.FC<{ hasHeroImage?: boolean }> = ({ hasHeroImage = false }) => {
+  /* Arka planda görsel varsa header'ı koyu (saydam) moda al, yoksa varsayılana bırak */
   const { setHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
-    setHeaderTheme('dark')
-  }, [setHeaderTheme])
+    setHeaderTheme(hasHeroImage ? 'dark' : null)
+  }, [hasHeroImage, setHeaderTheme])
   return <React.Fragment />
 }
 
