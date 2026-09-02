@@ -255,7 +255,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
   const homeHukukunGucuMedia = await ensureMedia('Görkemli bir mahkeme salonu', 'home-hukukun-gucu.jpg')
   const homeGenisKapsamMedia = await ensureMedia('Renkli ciltli kitaplarla dolu raflar', 'home-genis-kapsam.jpg')
   const degerGuvenSadakatMedia = await ensureMedia('Danışmanlık sırasında sohbet eden iki kişi', 'deger-guven-sadakat.jpg')
-  const degerSeffaflikMedia = await ensureMedia('Cam cepheli modern bina', 'deger-seffaflik.jpg')
   const degerTitizlikMedia = await ensureMedia('Büyüteç ile detay incelemesi', 'deger-titizlik.jpg')
   const degerBagimsizlikMedia = await ensureMedia('Adalet terazisi tutan heykel', 'deger-bagimsizlik.jpg')
   const faqBannerMedia = await ensureMedia('Ahşap masa ve koltuğuyla şık bir ofis', 'faq-banner.jpg')
@@ -416,11 +415,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         blockType: 'content',
         columns: [
           {
-            size: 'half',
-            media: degerSeffaflikMedia.id,
-          },
-          {
-            size: 'half',
+            size: 'full',
             richText: richTextRoot([headingNode(values[1].title, 'h3'), paragraphNode(values[1].text)]),
           },
         ],
@@ -696,11 +691,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         blockType: 'content',
         columns: [
           {
-            size: 'half',
-            media: degerSeffaflikMedia.id,
-          },
-          {
-            size: 'half',
+            size: 'full',
             richText: richTextRoot([headingNode(values[1].title, 'h3'), paragraphNode(values[1].text)]),
           },
         ],
