@@ -395,10 +395,103 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         columns: [
           {
             size: 'full',
-            richText: richTextRoot([
-              headingNode('Mesleki Değerlerimiz', 'h2'),
-              ...values.flatMap((v) => [headingNode(v.title, 'h3'), paragraphNode(v.text)]),
-            ]),
+            richText: richTextRoot([headingNode('Mesleki Değerlerimiz', 'h2')]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[0].title, 'h3'), paragraphNode(values[0].text)]),
+          },
+          {
+            size: 'half',
+            media: degerGuvenSadakatMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: degerSeffaflikMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[1].title, 'h3'), paragraphNode(values[1].text)]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[2].title, 'h3'), paragraphNode(values[2].text)]),
+          },
+          {
+            size: 'half',
+            media: degerTitizlikMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: degerBagimsizlikMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[3].title, 'h3'), paragraphNode(values[3].text)]),
+          },
+        ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: faqBannerMedia.id,
+        overlayText: 'Sıkça Sorulan Sorular',
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[0].q, 'h3'), paragraphNode(faq[0].a)]),
+          },
+          {
+            size: 'half',
+            media: faqVekaletnameMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: faqDavaHarciMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[1].q, 'h3'), paragraphNode(faq[1].a)]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[2].q, 'h3'), paragraphNode(faq[2].a)]),
+          },
+          {
+            size: 'half',
+            media: faqDavaMasrafiMedia.id,
           },
         ],
       },
@@ -407,10 +500,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         columns: [
           {
             size: 'full',
-            richText: richTextRoot([
-              headingNode('Sıkça Sorulan Sorular', 'h2'),
-              ...faq.flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)]),
-            ]),
+            richText: richTextRoot(faq.slice(3).flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)])),
           },
         ],
       },
