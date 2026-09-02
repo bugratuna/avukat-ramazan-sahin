@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react'
 
 import { LoaderOverlay } from './LoaderOverlay'
+import { waitForMediaReady } from './waitForMedia'
 
 const SESSION_KEY = 'rs-loader-shown'
 const MIN_VISIBLE_MS = 900
 const FADE_MS = 500
+const MAX_MEDIA_WAIT_MS = 6000
 
 /**
  * Site ilk açılırken (sekme başına bir kez) görünen kurumsal marka
@@ -25,12 +27,14 @@ export const PageLoader: React.FC = () => {
     const start = Date.now()
 
     const finish = () => {
-      const elapsed = Date.now() - start
-      const wait = Math.max(0, MIN_VISIBLE_MS - elapsed)
-      window.setTimeout(() => {
-        setFadingOut(true)
-        window.setTimeout(() => setMounted(false), FADE_MS)
-      }, wait)
+      waitForMediaReady(MAX_MEDIA_WAIT_MS).then(() => {
+        const elapsed = Date.now() - start
+        const wait = Math.max(0, MIN_VISIBLE_MS - elapsed)
+        window.setTimeout(() => {
+          setFadingOut(true)
+          window.setTimeout(() => setMounted(false), FADE_MS)
+        }, wait)
+      })
     }
 
     if (document.readyState === 'complete') {

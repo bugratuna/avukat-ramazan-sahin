@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { LoaderOverlay } from '@/components/PageLoader/LoaderOverlay'
+import { waitForMediaReady } from '@/components/PageLoader/waitForMedia'
 
 const MIN_VISIBLE_MS = 400
 const MAX_WAIT_MS = 5000
@@ -90,26 +91,7 @@ export const RouteTransitionLoader: React.FC = () => {
     let cancelled = false
 
     const raf = window.requestAnimationFrame(() => {
-      const imgs = Array.from(document.querySelectorAll('img'))
-      const pending = imgs.filter((img) => !img.complete)
-
-      const imagesReady =
-        pending.length === 0
-          ? Promise.resolve()
-          : Promise.race([
-              Promise.all(
-                pending.map(
-                  (img) =>
-                    new Promise<void>((resolve) => {
-                      img.addEventListener('load', () => resolve(), { once: true })
-                      img.addEventListener('error', () => resolve(), { once: true })
-                    }),
-                ),
-              ),
-              new Promise<void>((resolve) => window.setTimeout(resolve, MAX_WAIT_MS)),
-            ])
-
-      imagesReady.then(() => {
+      waitForMediaReady(MAX_WAIT_MS).then(() => {
         if (!cancelled) hideLoader()
       })
     })
