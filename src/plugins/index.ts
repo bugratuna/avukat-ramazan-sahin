@@ -3,7 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -26,20 +26,35 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
 
-// Vercel projesine bir Blob Store bağlandığında BLOB_READ_WRITE_TOKEN
-// otomatik olarak enjekte edilir; tanımlı değilse (yerel geliştirme)
-// Payload varsayılan yerel disk depolamasını kullanmaya devam eder
-// — bkz. src/collections/Media.ts `staticDir`.
-const hasBlobConfig = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+// Cloudflare R2 kimlik bilgileri tanımlıysa (production) medya bu S3-uyumlu
+// depoya yüklenir; tanımlı değilse (yerel geliştirme) Payload varsayılan
+// yerel disk depolamasını kullanmaya devam eder — bkz. src/collections/Media.ts
+// `staticDir`. R2, sıfır aktarım (egress) ücreti sayesinde Vercel Blob'a göre
+// çok daha ucuz — bkz. https://developers.cloudflare.com/r2/pricing/
+const hasR2Config = Boolean(
+  process.env.R2_ACCESS_KEY_ID &&
+    process.env.R2_SECRET_ACCESS_KEY &&
+    process.env.R2_BUCKET &&
+    process.env.R2_ENDPOINT,
+)
 
 export const plugins: Plugin[] = [
-  ...(hasBlobConfig
+  ...(hasR2Config
     ? [
-        vercelBlobStorage({
+        s3Storage({
+          bucket: process.env.R2_BUCKET as string,
           collections: {
             media: true,
           },
-          token: process.env.BLOB_READ_WRITE_TOKEN,
+          config: {
+            credentials: {
+              accessKeyId: process.env.R2_ACCESS_KEY_ID as string,
+              secretAccessKey: process.env.R2_SECRET_ACCESS_KEY as string,
+            },
+            endpoint: process.env.R2_ENDPOINT,
+            forcePathStyle: true,
+            region: 'auto',
+          },
         }),
       ]
     : []),
