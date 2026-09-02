@@ -530,6 +530,10 @@ export interface ContentBlock {
           };
           [k: string]: unknown;
         } | null;
+        /**
+         * Bu sütunda metin yerine (veya metinle birlikte) gösterilecek fotoğraf (opsiyonel). Sayfa kaydırıldıkça kayarak beliren bir animasyonla gösterilir.
+         */
+        media?: (number | null) | Media;
         enableLink?: boolean | null;
         link?: {
           type?: ('reference' | 'custom') | null;
@@ -563,6 +567,10 @@ export interface ContentBlock {
  */
 export interface MediaBlock {
   media: number | Media;
+  /**
+   * Doldurulursa, fotoğrafın üzerine ortalanmış büyük bir başlık olarak gösterilir (banner görünümü).
+   */
+  overlayText?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -1182,6 +1190,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
     | {
         size?: T;
         richText?: T;
+        media?: T;
         enableLink?: T;
         link?:
           | T
@@ -1204,6 +1213,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  overlayText?: T;
   id?: T;
   blockName?: T;
 }

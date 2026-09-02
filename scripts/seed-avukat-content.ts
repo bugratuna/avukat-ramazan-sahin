@@ -251,6 +251,18 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
   const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
   const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
 
+  // --- Metin yanına eklenen konuyla ilgili fotoğraflar (Unsplash, serbest lisans) --
+  const homeHukukunGucuMedia = await ensureMedia('Görkemli bir mahkeme salonu', 'home-hukukun-gucu.jpg')
+  const homeGenisKapsamMedia = await ensureMedia('Renkli ciltli kitaplarla dolu raflar', 'home-genis-kapsam.jpg')
+  const degerGuvenSadakatMedia = await ensureMedia('Danışmanlık sırasında sohbet eden iki kişi', 'deger-guven-sadakat.jpg')
+  const degerSeffaflikMedia = await ensureMedia('Cam cepheli modern bina', 'deger-seffaflik.jpg')
+  const degerTitizlikMedia = await ensureMedia('Büyüteç ile detay incelemesi', 'deger-titizlik.jpg')
+  const degerBagimsizlikMedia = await ensureMedia('Adalet terazisi tutan heykel', 'deger-bagimsizlik.jpg')
+  const faqBannerMedia = await ensureMedia('Ahşap masa ve koltuğuyla şık bir ofis', 'faq-banner.jpg')
+  const faqVekaletnameMedia = await ensureMedia('Resmi bir belgenin imzalanması', 'faq-vekaletname.jpg')
+  const faqDavaHarciMedia = await ensureMedia('Masada hesap makinesi ve vergi evrakı', 'faq-dava-harci.jpg')
+  const faqDavaMasrafiMedia = await ensureMedia('Bozuk paraların istiflenmesi', 'faq-dava-masrafi.jpg')
+
   // --- Sayfalar -------------------------------------------------------
   const upsertPage = async (data: Record<string, unknown> & { slug: string }) => {
     const { docs } = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
@@ -516,7 +528,11 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         blockType: 'content',
         columns: [
           {
-            size: 'full',
+            size: 'half',
+            media: homeHukukunGucuMedia.id,
+          },
+          {
+            size: 'half',
             richText: richTextRoot([
               headingNode('Hukukun Gücü, Tecrübenin Güvencesiyle Buluşuyor', 'h2'),
               paragraphNode(
@@ -550,7 +566,7 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         blockType: 'content',
         columns: [
           {
-            size: 'full',
+            size: 'half',
             richText: richTextRoot([
               headingNode(`${practiceAreas.length} Farklı Hukuk Alanında Uzmanlık`, 'h2'),
               paragraphNode(
@@ -558,17 +574,9 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
               ),
             ]),
           },
-        ],
-      },
-      {
-        blockType: 'content',
-        columns: [
           {
-            size: 'full',
-            richText: richTextRoot([
-              headingNode('Neden Ramazan Şahin Hukuk Bürosu?', 'h2'),
-              ...values.flatMap((v) => [headingNode(v.title, 'h3'), paragraphNode(v.text)]),
-            ]),
+            size: 'half',
+            media: homeGenisKapsamMedia.id,
           },
         ],
       },
@@ -577,12 +585,99 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         columns: [
           {
             size: 'full',
-            richText: richTextRoot([
-              headingNode('Sıkça Sorulan Sorular', 'h2'),
-              ...faq
-                .slice(0, 3)
-                .flatMap((f) => [headingNode(f.q, 'h3'), paragraphNode(f.a)]),
-            ]),
+            richText: richTextRoot([headingNode('Neden Ramazan Şahin Hukuk Bürosu?', 'h2')]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[0].title, 'h3'), paragraphNode(values[0].text)]),
+          },
+          {
+            size: 'half',
+            media: degerGuvenSadakatMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: degerSeffaflikMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[1].title, 'h3'), paragraphNode(values[1].text)]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[2].title, 'h3'), paragraphNode(values[2].text)]),
+          },
+          {
+            size: 'half',
+            media: degerTitizlikMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: degerBagimsizlikMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(values[3].title, 'h3'), paragraphNode(values[3].text)]),
+          },
+        ],
+      },
+      {
+        blockType: 'mediaBlock',
+        media: faqBannerMedia.id,
+        overlayText: 'Sıkça Sorulan Sorular',
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[0].q, 'h3'), paragraphNode(faq[0].a)]),
+          },
+          {
+            size: 'half',
+            media: faqVekaletnameMedia.id,
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            media: faqDavaHarciMedia.id,
+          },
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[1].q, 'h3'), paragraphNode(faq[1].a)]),
+          },
+        ],
+      },
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'half',
+            richText: richTextRoot([headingNode(faq[2].q, 'h3'), paragraphNode(faq[2].a)]),
             enableLink: true,
             link: {
               type: 'reference',
@@ -591,6 +686,10 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
               newTab: false,
               appearance: 'outline',
             },
+          },
+          {
+            size: 'half',
+            media: faqDavaMasrafiMedia.id,
           },
         ],
       },

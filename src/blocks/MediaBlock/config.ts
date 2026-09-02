@@ -15,5 +15,13 @@ export const MediaBlock: Block = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'overlayText',
+      type: 'text',
+      admin: {
+        description: 'Doldurulursa, fotoğrafın üzerine ortalanmış büyük bir başlık olarak gösterilir (banner görünümü).',
+      },
+      label: 'Fotoğraf Üzerindeki Başlık (opsiyonel)',
+    },
   ],
 }

@@ -1,6 +1,7 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { cn } from '@/utilities/ui'
+import { Instagram, Mail, MapPin, Phone } from 'lucide-react'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import type { Page } from '@/payload-types'
@@ -8,6 +9,14 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { firmInfo } from '@/endpoints/seed/avukat-data'
+
+const quickLinks = [
+  { Icon: Phone, label: 'Telefon', url: `tel:${firmInfo.phone.replace(/\s/g, '')}` },
+  { Icon: MapPin, label: 'Konum', url: firmInfo.mapsUrl },
+  { Icon: Mail, label: 'E-posta', url: `mailto:${firmInfo.email}` },
+  { Icon: Instagram, label: 'Instagram', url: firmInfo.social.instagram },
+]
 
 const ArrowIcon = () => (
   <svg
@@ -94,6 +103,30 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
           <div className="size-full bg-[radial-gradient(ellipse_at_top_right,_oklch(74%_0.11_75deg_/_25%),_transparent_60%),linear-gradient(to_bottom,_oklch(20%_0.03_255deg),_oklch(10%_0.01_255deg))]" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+      </div>
+
+      <div
+        className={cn(
+          'absolute top-1/2 left-6 z-10 hidden -translate-y-1/2 flex-col gap-3 md:flex',
+          enterClasses(mounted),
+        )}
+        style={{ transitionDelay: '300ms' }}
+      >
+        {quickLinks.map(({ Icon, label, url }) => {
+          const isExternal = url.startsWith('http')
+          return (
+            <a
+              aria-label={label}
+              className="flex size-11 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors hover:border-gold hover:bg-gold hover:text-gold-foreground"
+              href={url}
+              key={label}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
+              target={isExternal ? '_blank' : undefined}
+            >
+              <Icon className="size-5" />
+            </a>
+          )
+        })}
       </div>
 
       <div className="container relative z-10 pt-32 pb-24 md:pt-40 md:pb-28">

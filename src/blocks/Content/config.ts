@@ -49,6 +49,16 @@ const columnFields: Field[] = [
     label: false,
   },
   {
+    name: 'media',
+    type: 'upload',
+    admin: {
+      description:
+        'Bu sütunda metin yerine (veya metinle birlikte) gösterilecek fotoğraf (opsiyonel). Sayfa kaydırıldıkça kayarak beliren bir animasyonla gösterilir.',
+    },
+    label: 'Fotoğraf',
+    relationTo: 'media',
+  },
+  {
     name: 'enableLink',
     type: 'checkbox',
   },
