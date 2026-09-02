@@ -251,6 +251,22 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
   const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
   const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
 
+  // --- Ana sayfa hero slaytları için konuyla ilgili fotoğraflar ---------
+  const heroSlidePhotoInfo: Record<string, { alt: string; file: string }> = {
+    guvenilirCozumler: { alt: 'Raflarda dizili hukuk kitapları', file: 'hero-slide-1-hukuk-kitaplari.jpg' },
+    genisKapsam: { alt: 'Danışmanlık toplantısında not alan ekip', file: 'hero-slide-2-danismanlik-toplanti.jpg' },
+    yenilikciYaklasim: { alt: 'Modern çalışma masasında dizüstü bilgisayar', file: 'hero-slide-3-yenilikci-strateji.jpg' },
+    guvenIliskisi: { alt: 'Müvekkil ile el sıkışma anı', file: 'hero-slide-4-guven-musteri-iliskisi.jpg' },
+  }
+  const heroSlideMedia = Object.fromEntries(
+    await Promise.all(
+      Object.entries(heroSlidePhotoInfo).map(async ([key, { alt, file }]) => [
+        key,
+        await ensureMedia(alt, file),
+      ]),
+    ),
+  ) as Record<keyof typeof heroSlidePhotoInfo, Awaited<ReturnType<typeof ensureMedia>>>
+
   // --- Sayfalar -------------------------------------------------------
   const upsertPage = async (data: Record<string, unknown> & { slug: string }) => {
     const { docs } = await payload.find({ collection: 'pages', where: { slug: { equals: data.slug } }, limit: 1 })
@@ -470,24 +486,28 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
           heading: 'Güvenilir Hukuki Çözümler, Kararlı Savunma',
           description:
             'Sürekli güncellenen mevzuat bilgimiz ve stratejik bakış açımızla, hukuki süreçlerinizi en doğru şekilde yöneterek güvenilir çözümler üretiyoruz.',
+          image: heroSlideMedia.guvenilirCozumler.id,
         },
         {
           eyebrow: 'Geniş Kapsamlı Hukuki Danışmanlık',
           heading: 'Her Hukuki İhtiyacınıza Tek Adresten Çözüm',
           description:
             'Ticaret ve icra-iflastan gayrimenkule, konkordatodan idare hukukuna uzanan geniş uzmanlık alanımızla, karmaşık süreçlerinizi tek bir ekiple yönetiyoruz.',
+          image: heroSlideMedia.genisKapsam.id,
         },
         {
           eyebrow: 'Yenilikçi ve Stratejik Yaklaşım',
           heading: 'Geleneksel Hukuk Bilgisini Çağın Gereksinimleriyle Buluşturuyoruz',
           description:
             'Değişen mevzuatı ve ticari koşulları yakından takip ederek, müvekkillerimize güncel ve yenilikçi hukuki stratejiler sunuyoruz.',
+          image: heroSlideMedia.yenilikciYaklasim.id,
         },
         {
           eyebrow: 'Güven Temelli Müvekkil İlişkisi',
           heading: 'Haklarınızı Korurken Güveninizi Kazanıyoruz',
           description:
             'Her dosyaya özel ilgi göstererek, süreç boyunca şeffaf iletişim kurmayı ve müvekkillerimizin haklarını en etkin şekilde savunmayı ilke ediniyoruz.',
+          image: heroSlideMedia.guvenIliskisi.id,
         },
       ],
       links: [
