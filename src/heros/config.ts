@@ -86,15 +86,6 @@ export const hero: Field = {
           type: 'textarea',
           label: 'Açıklama',
         },
-        {
-          name: 'image',
-          type: 'upload',
-          admin: {
-            description: 'Bu slaytın metniyle birlikte gösterilen konuyla ilgili fotoğraf (opsiyonel).',
-          },
-          label: 'Fotoğraf',
-          relationTo: 'media',
-        },
       ],
       label: 'Kayan Metinler (Slider)',
     },
