@@ -43,6 +43,11 @@ export const plugins: Plugin[] = [
     ? [
         s3Storage({
           bucket: process.env.R2_BUCKET as string,
+          // Vercel'in sunucusuz fonksiyonlarında istek gövdesi ~4.5MB ile
+          // sınırlı — bu yüzden video gibi büyük dosyalar sunucudan değil,
+          // doğrudan tarayıcıdan R2'ye yüklenir (CORS ayarı gerektirir,
+          // bkz. scripts'teki R2 CORS kurulum notu).
+          clientUploads: true,
           collections: {
             media: true,
           },

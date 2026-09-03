@@ -35,6 +35,14 @@ export async function Footer() {
             </Link>{' '}
             inceleyebilirsiniz.
           </p>
+          <div className="mt-3 flex flex-col gap-1 text-xs">
+            <Link className="text-navy-foreground/50 hover:text-gold" href="/kvkk-aydinlatma-metni">
+              KVKK Aydınlatma Metni
+            </Link>
+            <Link className="text-navy-foreground/50 hover:text-gold" href="/cerez-politikasi">
+              Çerez Politikası
+            </Link>
+          </div>
         </div>
 
         <div>
@@ -95,24 +103,13 @@ export async function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container flex flex-col-reverse items-center justify-between gap-3 py-6 text-xs text-navy-foreground/60 md:flex-row">
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-center md:text-left">
-            <span>
+        <div className="container grid grid-cols-1 items-center gap-3 py-6 text-xs text-navy-foreground/60 md:grid-cols-[1fr_auto_1fr]">
+          <div className="hidden md:block" />
+          <p className="text-center">
+            <span className="block">
               © {year} {firmInfo.name}. Tüm hakları saklıdır.
             </span>
-            <Link className="hover:text-gold" href="/kvkk-aydinlatma-metni">
-              KVKK Aydınlatma Metni
-            </Link>
-            <span aria-hidden className="text-navy-foreground/30">
-              ·
-            </span>
-            <Link className="hover:text-gold" href="/cerez-politikasi">
-              Çerez Politikası
-            </Link>
-            <span aria-hidden className="text-navy-foreground/30">
-              ·
-            </span>
-            <span>
+            <span className="block">
               Bu site{' '}
               <a
                 className="hover:text-gold"
@@ -125,7 +122,7 @@ export async function Footer() {
               tarafından tasarlanmıştır.
             </span>
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center gap-4 md:justify-self-end">
             <ThemeSelector />
             <Logo className="text-navy-foreground/70" iconOnly />
           </div>
