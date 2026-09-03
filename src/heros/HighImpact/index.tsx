@@ -2,7 +2,7 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { cn } from '@/utilities/ui'
 import { Instagram, Mail, MapPin, Phone } from 'lucide-react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -52,12 +52,22 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
   const [mounted, setMounted] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [slideVisible, setSlideVisible] = useState(true)
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const heroRef = useRef<HTMLDivElement>(null)
 
   const validSlides = useMemo(
     () => (slides ?? []).filter((slide): slide is NonNullable<typeof slide> => Boolean(slide?.heading)),
     [slides],
   )
   const useSlider = validSlides.length > 1
+
+  const goToSlide = (index: number) => {
+    setSlideVisible(false)
+    window.setTimeout(() => {
+      setActiveIndex(index)
+      setSlideVisible(true)
+    }, SLIDE_FADE_MS)
+  }
 
   useEffect(() => {
     setHeaderTheme('dark')
@@ -69,15 +79,34 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
     if (!useSlider) return
 
     const interval = window.setInterval(() => {
-      setSlideVisible(false)
-      window.setTimeout(() => {
-        setActiveIndex((current) => (current + 1) % validSlides.length)
-        setSlideVisible(true)
-      }, SLIDE_FADE_MS)
+      goToSlide((activeIndex + 1) % validSlides.length)
     }, SLIDE_INTERVAL_MS)
 
     return () => window.clearInterval(interval)
-  }, [useSlider, validSlides.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useSlider, validSlides.length, activeIndex])
+
+  // Kaydırma çubuğunun aşağısındaki gösterge topu, hero video ekrandan
+  // çıkana kadar kaydırma ilerlemesini takip ederek aşağı iner.
+  useEffect(() => {
+    let raf = 0
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const node = heroRef.current
+        if (!node) return
+        const rect = node.getBoundingClientRect()
+        const progress = rect.height > 0 ? Math.min(1, Math.max(0, -rect.top / rect.height)) : 0
+        setScrollProgress(progress)
+      })
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
 
   const activeSlide = useSlider ? validSlides[activeIndex] : null
   const textVisible = mounted && slideVisible
@@ -89,6 +118,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
         hasAdminBar ? '-mt-40' : '-mt-30',
       )}
       data-theme="dark"
+      ref={heroRef}
     >
       <div className="absolute inset-0 -z-10 select-none">
         {media && typeof media === 'object' ? (
@@ -212,14 +242,19 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
           {useSlider && (
             <div className="mt-8 flex gap-2" role="tablist" aria-label="Öne çıkan bilgiler">
               {validSlides.map((slide, i) => (
-                <span
+                <button
                   aria-current={i === activeIndex}
+                  aria-label={slide.heading}
                   className={cn(
-                    'h-1 w-8 rounded-full transition-colors duration-300',
+                    'h-1 w-8 rounded-full transition-colors duration-300 hover:bg-gold/70',
                     i === activeIndex ? 'bg-gold' : 'bg-white/25',
                   )}
                   key={slide.id ?? i}
+                  onClick={() => {
+                    if (i !== activeIndex) goToSlide(i)
+                  }}
                   role="tab"
+                  type="button"
                 />
               ))}
             </div>
@@ -227,9 +262,15 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ eyebrow, links, media, 
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-6 z-10 hidden justify-center md:flex">
+      <div
+        className="absolute inset-x-0 bottom-6 z-10 hidden justify-center md:flex"
+        style={{ opacity: 1 - scrollProgress }}
+      >
         <span className="flex h-9 w-6 items-start justify-center rounded-full border border-white/40 p-1.5">
-          <span className="size-1 animate-bounce rounded-full bg-white/80" />
+          <span
+            className="size-1 rounded-full bg-white/80"
+            style={{ transform: `translateY(${scrollProgress * 20}px)` }}
+          />
         </span>
       </div>
     </div>

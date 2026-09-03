@@ -249,7 +249,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     }))
 
   const meetingRoomMedia = await ensureMedia('Ofis toplantı odası', 'office-meeting.jpg')
-  const officeBuildingMedia = await ensureMedia('Modern ofis binası cephesi', 'architecture.jpg')
 
   // --- Metin yanına eklenen konuyla ilgili fotoğraflar (Unsplash, serbest lisans) --
   const homeHukukunGucuMedia = await ensureMedia('Görkemli bir mahkeme salonu', 'home-hukukun-gucu.jpg')
@@ -384,10 +383,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
             ]),
           },
         ],
-      },
-      {
-        blockType: 'mediaBlock',
-        media: officeBuildingMedia.id,
       },
       {
         blockType: 'content',
@@ -636,10 +631,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         ],
       },
       {
-        blockType: 'mediaBlock',
-        media: officeBuildingMedia.id,
-      },
-      {
         blockType: 'archive',
         introContent: richTextRoot([headingNode('Faaliyet Alanlarımız', 'h2')]),
         populateBy: 'collection',
@@ -723,58 +714,6 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
         ],
       },
       {
-        blockType: 'mediaBlock',
-        media: faqBannerMedia.id,
-        overlayText: 'Sıkça Sorulan Sorular',
-      },
-      {
-        blockType: 'content',
-        columns: [
-          {
-            size: 'half',
-            richText: richTextRoot([headingNode(faq[0].q, 'h3'), paragraphNode(faq[0].a)]),
-          },
-          {
-            size: 'half',
-            media: faqVekaletnameMedia.id,
-          },
-        ],
-      },
-      {
-        blockType: 'content',
-        columns: [
-          {
-            size: 'half',
-            media: faqDavaHarciMedia.id,
-          },
-          {
-            size: 'half',
-            richText: richTextRoot([headingNode(faq[1].q, 'h3'), paragraphNode(faq[1].a)]),
-          },
-        ],
-      },
-      {
-        blockType: 'content',
-        columns: [
-          {
-            size: 'half',
-            richText: richTextRoot([headingNode(faq[2].q, 'h3'), paragraphNode(faq[2].a)]),
-            enableLink: true,
-            link: {
-              type: 'reference',
-              reference: { relationTo: 'pages', value: hakkimizdaPage.id },
-              label: 'Tüm Soruları Görüntüle',
-              newTab: false,
-              appearance: 'outline',
-            },
-          },
-          {
-            size: 'half',
-            media: faqDavaMasrafiMedia.id,
-          },
-        ],
-      },
-      {
         blockType: 'cta',
         richText: richTextRoot([headingNode('Hukuki danışmanlık ve randevu talepleriniz için bize ulaşın', 'h2')]),
         links: [
@@ -794,6 +733,57 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
       title: 'Bursa Avukatlık ve Hukuk Danışmanlığı',
       description:
         'Ceza, aile, ticaret, icra-iflas, gayrimenkul ve daha birçok alanda güvenilir hukuki danışmanlık ve dava takibi.',
+    },
+  })
+
+  await upsertPage({
+    slug: 'cerez-politikasi',
+    title: 'Çerez Politikası',
+    _status: 'published',
+    hero: {
+      type: 'lowImpact',
+      richText: richTextRoot([
+        headingNode('Çerez Politikası', 'h1'),
+        paragraphNode(
+          'Bu sayfa, sitemizi ziyaret ettiğinizde tarayıcınızda hangi verilerin ne amaçla tutulduğunu açıklar.',
+        ),
+      ]),
+    },
+    layout: [
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Zorunlu / İşlevsel Çerezler', 'h2'),
+              paragraphNode(
+                'Siteye yönetici olarak giriş yaptığınızda, oturumunuzu açık tutmak için tarayıcınıza bir oturum çerezi (payload-token) yerleştirilir. Bu çerez yalnızca içerik yönetim paneline giriş yapan yetkili kullanıcılar için geçerlidir; sitemizi normal şekilde ziyaret eden kullanıcılar için herhangi bir çerez oluşturulmaz.',
+              ),
+              headingNode('Yerel Depolama (Çerez Değildir)', 'h2'),
+              paragraphNode(
+                'Sitemiz, tercih ettiğiniz görünüm temasını (açık/koyu) ve sayfa açılış animasyonunun bir kez gösterildiğini hatırlamak için tarayıcınızın yerel depolama alanını (localStorage/sessionStorage) kullanır. Bu bilgiler yalnızca kendi cihazınızda tutulur, sunucularımıza gönderilmez ve tarayıcı verilerinizi temizlediğinizde silinir.',
+              ),
+              headingNode('Üçüncü Taraf İçerikler', 'h2'),
+              paragraphNode(
+                'İletişim sayfamızda konumumuzu göstermek için Google Haritalar gömülü olarak kullanılmaktadır. Bu harita yüklendiğinde Google kendi çerez politikası çerçevesinde çerez yerleştirebilir; bu çerezler bizim kontrolümüzde değildir. WhatsApp üzerinden bize ulaşmak istediğinizde ise yalnızca WhatsApp uygulamasına yönlendiren bir bağlantı kullanılır, sitemiz herhangi bir veri paylaşmaz.',
+              ),
+              headingNode('Analiz ve Reklam Çerezleri Kullanmıyoruz', 'h2'),
+              paragraphNode(
+                'Sitemizde Google Analytics veya benzeri bir analiz/izleme aracı, reklam çerezi ya da üçüncü taraf pazarlama takip kodu bulunmamaktadır.',
+              ),
+              headingNode('İletişim', 'h2'),
+              paragraphNode(
+                `Çerez politikamızla ilgili sorularınız için ${firmInfo.email} adresinden bize ulaşabilirsiniz.`,
+              ),
+            ]),
+          },
+        ],
+      },
+    ],
+    meta: {
+      title: 'Çerez Politikası',
+      description: `${firmInfo.name} çerez politikası — tarayıcınızda hangi verilerin ne amaçla tutulduğu.`,
     },
   })
 

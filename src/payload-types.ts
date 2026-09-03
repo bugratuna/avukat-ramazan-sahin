@@ -566,7 +566,14 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: number | Media;
+  /**
+   * Fotoğraf veya kendi video dosyanızı buradan yükleyebilirsiniz. Bunun yerine bir YouTube videosu eklemek isterseniz aşağıdaki "YouTube Video Bağlantısı" alanını kullanın — ikisinden yalnızca biri yeterlidir.
+   */
+  media?: (number | null) | Media;
+  /**
+   * Bir YouTube video bağlantısı (örn. https://www.youtube.com/watch?v=... veya https://youtu.be/...) yapıştırırsanız, yukarıdaki medya yerine bu video gömülü olarak gösterilir.
+   */
+  youtubeUrl?: string | null;
   /**
    * Doldurulursa, fotoğrafın üzerine ortalanmış büyük bir başlık olarak gösterilir (banner görünümü).
    */
@@ -1213,6 +1220,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  youtubeUrl?: T;
   overlayText?: T;
   id?: T;
   blockName?: T;

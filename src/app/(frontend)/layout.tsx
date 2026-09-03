@@ -10,6 +10,7 @@ import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { MainContent } from '@/components/MainContent'
+import { CookieConsent } from '@/components/CookieConsent'
 import { PageLoader } from '@/components/PageLoader'
 import { RouteTransitionLoader } from '@/components/RouteTransitionLoader'
 import { Providers } from '@/providers'
@@ -53,6 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <MainContent>{children}</MainContent>
           <Footer />
           <WhatsAppButton />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

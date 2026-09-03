@@ -7,6 +7,7 @@ import RichText from '@/components/RichText'
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
 import { Media } from '../../components/Media'
+import { getYouTubeId } from '@/utilities/getYouTubeId'
 
 type Props = MediaBlockProps & {
   breakout?: boolean
@@ -28,10 +29,29 @@ export const MediaBlock: React.FC<Props> = (props) => {
     overlayText,
     staticImage,
     disableInnerContainer,
+    youtubeUrl,
   } = props
 
   let caption
   if (media && typeof media === 'object') caption = media.caption
+
+  const youtubeId = youtubeUrl ? getYouTubeId(youtubeUrl) : null
+
+  if (youtubeId) {
+    return (
+      <div className={cn({ container: enableGutter }, className)}>
+        <div className="relative aspect-video w-full overflow-hidden rounded-[0.8rem] border border-border">
+          <iframe
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="absolute inset-0 size-full"
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+            title="YouTube video"
+          />
+        </div>
+      </div>
+    )
+  }
 
   if (overlayText) {
     return (

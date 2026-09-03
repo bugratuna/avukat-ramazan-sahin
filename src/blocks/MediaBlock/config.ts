@@ -11,9 +11,21 @@ export const MediaBlock: Block = {
     {
       name: 'media',
       type: 'upload',
-      label: 'Medya',
+      admin: {
+        description:
+          'Fotoğraf veya kendi video dosyanızı buradan yükleyebilirsiniz. Bunun yerine bir YouTube videosu eklemek isterseniz aşağıdaki "YouTube Video Bağlantısı" alanını kullanın — ikisinden yalnızca biri yeterlidir.',
+      },
+      label: 'Medya (Fotoğraf veya Video Dosyası)',
       relationTo: 'media',
-      required: true,
+    },
+    {
+      name: 'youtubeUrl',
+      type: 'text',
+      admin: {
+        description:
+          'Bir YouTube video bağlantısı (örn. https://www.youtube.com/watch?v=... veya https://youtu.be/...) yapıştırırsanız, yukarıdaki medya yerine bu video gömülü olarak gösterilir.',
+      },
+      label: 'YouTube Video Bağlantısı (opsiyonel)',
     },
     {
       name: 'overlayText',

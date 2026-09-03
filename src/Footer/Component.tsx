@@ -88,8 +88,28 @@ export async function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container flex flex-col-reverse items-center justify-between gap-3 py-6 text-xs text-navy-foreground/60 md:flex-row">
-          <p>
-            © {year} {firmInfo.name}. Tüm hakları saklıdır.
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-center md:text-left">
+            <span>
+              © {year} {firmInfo.name}. Tüm hakları saklıdır.
+            </span>
+            <Link className="hover:text-gold" href="/cerez-politikasi">
+              Çerez Politikası
+            </Link>
+            <span aria-hidden className="text-navy-foreground/30">
+              ·
+            </span>
+            <span>
+              Bu site{' '}
+              <a
+                className="hover:text-gold"
+                href="https://bugratuna.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Buğra Tuna
+              </a>{' '}
+              tarafından tasarlanmıştır.
+            </span>
           </p>
           <div className="flex items-center gap-4">
             <ThemeSelector />
