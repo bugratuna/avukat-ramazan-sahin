@@ -27,6 +27,14 @@ export async function Footer() {
             Ceza, aile, ticaret, icra-iflas ve daha birçok alanda güvenilir hukuki danışmanlık ve
             dava takibi.
           </p>
+          <p className="mt-4 max-w-sm text-xs text-navy-foreground/50">
+            Kişisel verileriniz 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında
+            işlenmektedir. Detaylar için{' '}
+            <Link className="underline hover:text-gold" href="/kvkk-aydinlatma-metni">
+              KVKK Aydınlatma Metnimizi
+            </Link>{' '}
+            inceleyebilirsiniz.
+          </p>
         </div>
 
         <div>
@@ -91,6 +99,12 @@ export async function Footer() {
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-center md:text-left">
             <span>
               © {year} {firmInfo.name}. Tüm hakları saklıdır.
+            </span>
+            <Link className="hover:text-gold" href="/kvkk-aydinlatma-metni">
+              KVKK Aydınlatma Metni
+            </Link>
+            <span aria-hidden className="text-navy-foreground/30">
+              ·
             </span>
             <Link className="hover:text-gold" href="/cerez-politikasi">
               Çerez Politikası

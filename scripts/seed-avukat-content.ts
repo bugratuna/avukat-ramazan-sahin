@@ -772,6 +772,9 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
               paragraphNode(
                 'Sitemizde Google Analytics veya benzeri bir analiz/izleme aracı, reklam çerezi ya da üçüncü taraf pazarlama takip kodu bulunmamaktadır.',
               ),
+              paragraphNode(
+                'Kişisel verilerinizin 6698 sayılı KVKK kapsamında nasıl işlendiği hakkında ayrıntılı bilgi için KVKK Aydınlatma Metnimizi inceleyebilirsiniz.',
+              ),
               headingNode('İletişim', 'h2'),
               paragraphNode(
                 `Çerez politikamızla ilgili sorularınız için ${firmInfo.email} adresinden bize ulaşabilirsiniz.`,
@@ -784,6 +787,69 @@ payload.logger.info('Avukat Ramazan Şahin içeriği yazılıyor...')
     meta: {
       title: 'Çerez Politikası',
       description: `${firmInfo.name} çerez politikası — tarayıcınızda hangi verilerin ne amaçla tutulduğu.`,
+    },
+  })
+
+  await upsertPage({
+    slug: 'kvkk-aydinlatma-metni',
+    title: 'KVKK Aydınlatma Metni',
+    _status: 'published',
+    hero: {
+      type: 'lowImpact',
+      richText: richTextRoot([
+        headingNode('KVKK Aydınlatma Metni', 'h1'),
+        paragraphNode(
+          '6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, veri sorumlusu sıfatıyla kişisel verilerinizi hangi amaçlarla ve nasıl işlediğimizi bu sayfada açıklıyoruz.',
+        ),
+      ]),
+    },
+    layout: [
+      {
+        blockType: 'content',
+        columns: [
+          {
+            size: 'full',
+            richText: richTextRoot([
+              headingNode('Veri Sorumlusu', 'h2'),
+              paragraphNode(
+                `${firmInfo.name} ("Büro"), ${firmInfo.address} adresinde faaliyet göstermektedir. KVKK kapsamında kişisel verilerinizin işlenmesine ilişkin veri sorumlusu Büromuzdur.`,
+              ),
+              headingNode('İşlenen Kişisel Veriler ve Toplanma Yöntemi', 'h2'),
+              paragraphNode(
+                'Bizimle telefon, e-posta, WhatsApp üzerinden iletişime geçtiğinizde veya ofisimizi ziyaret ettiğinizde; ad-soyad, telefon numarası, e-posta adresi, iletişim adresi ile hukuki danışmanlık talebinize konu uyuşmazlık ve dosya bilgileriniz gibi kişisel verileriniz doğrudan sizin tarafınızdan paylaşılması yoluyla işlenmektedir. İnternet sitemiz, ziyaretçilerden veri toplayan bir iletişim formu içermemektedir; sitede tarayıcı düzeyinde işlenen teknik veriler için ayrıca Çerez Politikamızı inceleyebilirsiniz.',
+              ),
+              headingNode('Kişisel Verilerin İşlenme Amaçları', 'h2'),
+              paragraphNode(
+                'Kişisel verileriniz; hukuki danışmanlık ve avukatlık hizmetlerinin yürütülmesi, vekalet ilişkisinin kurulması ve ifası, dava ve icra takip süreçlerinin yönetilmesi, yasal yükümlülüklerimizin (Avukatlık Kanunu ve ilgili meslek kuralları dahil) yerine getirilmesi ile iletişim taleplerinizin yanıtlanması amaçlarıyla işlenmektedir.',
+              ),
+              headingNode('Hukuki Sebep', 'h2'),
+              paragraphNode(
+                'Kişisel verileriniz, KVKK\'nın 5. maddesinde belirtilen; bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması, hukuki yükümlülüğümüzün yerine getirilmesi, bir hakkın tesisi veya korunması için verinin işlenmesinin zorunlu olması ve meşru menfaatlerimiz için veri işlenmesinin zorunlu olması hukuki sebeplerine dayanılarak işlenmektedir. Bu sebeplerin karşılanmadığı hallerde açık rızanız alınır.',
+              ),
+              headingNode('Kişisel Verilerin Aktarılması', 'h2'),
+              paragraphNode(
+                'Kişisel verileriniz, hukuki bir zorunluluk bulunmadıkça (mahkemeler, icra daireleri, noterler ve diğer resmi kurumlarla yapılması gereken paylaşımlar hariç) üçüncü kişilerle paylaşılmamaktadır.',
+              ),
+              headingNode('Saklama Süresi', 'h2'),
+              paragraphNode(
+                'Kişisel verileriniz, ilgili mevzuatta öngörülen süreler (Avukatlık Kanunu\'ndan doğan dosya saklama yükümlülüğü ve genel zamanaşımı süreleri dahil) boyunca ve işlendikleri amaç için gerekli olan süre kadar saklanmaktadır.',
+              ),
+              headingNode('KVKK Madde 11 Kapsamındaki Haklarınız', 'h2'),
+              paragraphNode(
+                'KVKK\'nın 11. maddesi uyarınca; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme, eksik veya yanlış işlenmişse düzeltilmesini isteme, KVKK\'da öngörülen şartlar çerçevesinde silinmesini veya yok edilmesini isteme, düzeltme/silme işlemlerinin verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme, işlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işleme nedeniyle zarara uğramanız halinde zararın giderilmesini talep etme haklarına sahipsiniz.',
+              ),
+              headingNode('Başvuru Yöntemi', 'h2'),
+              paragraphNode(
+                `Yukarıda sayılan haklarınızı kullanmak için talebinizi yazılı olarak ${firmInfo.address} adresine veya ${firmInfo.email} e-posta adresine iletebilirsiniz. Başvurunuz, niteliğine göre en kısa sürede ve en geç yasal süresi içinde sonuçlandırılacaktır.`,
+              ),
+            ]),
+          },
+        ],
+      },
+    ],
+    meta: {
+      title: 'KVKK Aydınlatma Metni',
+      description: `${firmInfo.name} KVKK aydınlatma metni — kişisel verilerinizin hangi amaçlarla işlendiği ve haklarınız.`,
     },
   })
 
