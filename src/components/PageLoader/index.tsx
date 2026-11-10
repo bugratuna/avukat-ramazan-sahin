@@ -6,9 +6,9 @@ import { LoaderOverlay } from './LoaderOverlay'
 import { waitForMediaReady } from './waitForMedia'
 
 const SESSION_KEY = 'rs-loader-shown'
-const MIN_VISIBLE_MS = 900
-const FADE_MS = 500
-const MAX_MEDIA_WAIT_MS = 6000
+const MIN_VISIBLE_MS = 300
+const FADE_MS = 300
+const MAX_MEDIA_WAIT_MS = 800
 
 /**
  * Site ilk açılırken (sekme başına bir kez) görünen kurumsal marka

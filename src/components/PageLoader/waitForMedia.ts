@@ -6,8 +6,21 @@
  * gösterecek kadar (readyState >= HAVE_CURRENT_DATA) yüklenmesini bekler.
  */
 
+/**
+ * Yalnızca ekranda (ilk görünüm alanında) olan öğeler beklenir. Ekran
+ * dışındaki `loading="lazy"` görseller kullanıcı kaydırana kadar hiç
+ * yüklenmediği için onları beklemek yükleyiciyi her seferinde zaman
+ * aşımına kadar açık tutuyordu.
+ */
+const isInViewport = (el: Element): boolean => {
+  const rect = el.getBoundingClientRect()
+  return rect.bottom > 0 && rect.top < window.innerHeight && rect.width > 0 && rect.height > 0
+}
+
 const waitForImages = (maxWaitMs: number): Promise<void> => {
-  const pending = Array.from(document.querySelectorAll('img')).filter((img) => !img.complete)
+  const pending = Array.from(document.querySelectorAll('img')).filter(
+    (img) => !img.complete && isInViewport(img),
+  )
   if (pending.length === 0) return Promise.resolve()
 
   return Promise.race([
@@ -27,7 +40,7 @@ const waitForImages = (maxWaitMs: number): Promise<void> => {
 const waitForVideos = (maxWaitMs: number): Promise<void> => {
   const HAVE_CURRENT_DATA = 2
   const pending = Array.from(document.querySelectorAll('video')).filter(
-    (video) => video.readyState < HAVE_CURRENT_DATA,
+    (video) => video.readyState < HAVE_CURRENT_DATA && isInViewport(video),
   )
   if (pending.length === 0) return Promise.resolve()
 
