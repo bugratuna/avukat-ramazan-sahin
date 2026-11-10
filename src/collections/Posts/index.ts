@@ -1,12 +1,16 @@
 import type { CollectionConfig } from 'payload'
 
 import {
+  BlockquoteFeature,
   BlocksFeature,
   FixedToolbarFeature,
   HeadingFeature,
   HorizontalRuleFeature,
   InlineToolbarFeature,
   lexicalEditor,
+  OrderedListFeature,
+  UnorderedListFeature,
+  UploadFeature,
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
@@ -99,6 +103,13 @@ export const Posts: CollectionConfig<'posts'> = {
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
                     BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+                    // Makale yazarken araç çubuğundan doğrudan fotoğraf eklenebilsin
+                    // (sürükle-bırak / yapıştır da çalışır) — Medya Bloğu'nu
+                    // aramaya gerek kalmasın.
+                    UploadFeature({ collections: { media: { fields: [] } } }),
+                    UnorderedListFeature(),
+                    OrderedListFeature(),
+                    BlockquoteFeature(),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
