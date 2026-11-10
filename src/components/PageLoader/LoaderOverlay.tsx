@@ -8,7 +8,7 @@ import React from 'react'
 export const LoaderOverlay: React.FC<{ fadingOut: boolean }> = ({ fadingOut }) => (
   <div
     aria-hidden="true"
-    className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-navy transition-opacity duration-500 ease-out motion-reduce:transition-none ${
+    className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-navy transition-opacity duration-300 ease-out motion-reduce:transition-none ${
       fadingOut ? 'pointer-events-none opacity-0' : 'opacity-100'
     }`}
   >

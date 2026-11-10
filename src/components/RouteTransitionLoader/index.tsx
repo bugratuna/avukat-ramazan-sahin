@@ -6,9 +6,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { LoaderOverlay } from '@/components/PageLoader/LoaderOverlay'
 import { waitForMediaReady } from '@/components/PageLoader/waitForMedia'
 
-const MIN_VISIBLE_MS = 400
-const MAX_WAIT_MS = 5000
-const FADE_MS = 400
+const MIN_VISIBLE_MS = 150
+const MAX_WAIT_MS = 800
+const FADE_MS = 250
 const SAFETY_TIMEOUT_MS = 8000
 
 /**
